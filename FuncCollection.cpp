@@ -5,7 +5,7 @@ void FuncCollection::AddFunc(string newfunc)
     Function New(newfunc);
     arr_function.push_back(New);
 }
-
+/*
 void FuncCollection::DeleteFunc(string oldfunc)
 {
     int i = 0;
@@ -18,3 +18,4 @@ void FuncCollection::RecastGraph()
 {
     canvas.recast();
 }
+*/

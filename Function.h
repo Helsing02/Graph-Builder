@@ -14,9 +14,9 @@ private:
     bool Letter(char);
     bool Digit(char);
     bool Operation(char);
+    void CreateRPN(string);
 public:
-    Function(string);//конструктор
-    void CreateRPN(string);//построение полиза
-    float GetY(float); //медот для вычисления координаты Y по координате X
-    void Update(string);//обновляет полиз
+    Function(string);
+    float GetY(float); 
+    void Update(string);
 };

@@ -446,13 +446,13 @@ float Function::GetY(float x) { //вычисления у по х
                 else if (s == "exp()") Stek1.push(exp(first));
                 else {
                     cout << "Error when finding Y";
-                    exit;
+                    exit(0);
                 }
             }
         }
         else {
             cout << "Error when finding Y";
-            exit;
+            exit(0);
         }
     }
     result = Stek1.top();
