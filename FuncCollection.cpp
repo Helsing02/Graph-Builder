@@ -1,17 +1,4 @@
-﻿#include <iostream>
-#include <vector>
-
-using namespace std;
-
-class FuncCollection
-{
-    vector <Function> arr_function;
-    FuncWindow canvas; 
-public:
-    void AddFunc(string newfunc);
-    void DeleteFunc(string oldfunc);
-    void RecastGraph();
-};
+﻿#include "FuncCollection.h"
 
 void FuncCollection::AddFunc(string newfunc)
 {
@@ -30,9 +17,4 @@ void FuncCollection::DeleteFunc(string oldfunc)
 void FuncCollection::RecastGraph()
 {
     canvas.recast();
-}
-
-int main()
-{
-    // я у мамы программист
 }
