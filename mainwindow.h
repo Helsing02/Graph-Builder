@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "DynamicField.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -17,8 +18,11 @@ public:
 
 private slots:
     void on_addBtn_clicked();
+    void delete_Dfield(DynamicField* df=0);
 
 private:
     Ui::MainWindow *ui;
+    QVector <DynamicField*> fields;
+
 };
 #endif // MAINWINDOW_H

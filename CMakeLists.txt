@@ -21,6 +21,9 @@ set(PROJECT_SOURCES
         Function.cpp
         FuncCollection.h
         FuncCollection.cpp
+
+        DynamicField.h
+        DynamicField.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
