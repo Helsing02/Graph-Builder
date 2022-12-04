@@ -44,8 +44,14 @@ DynamicField::~DynamicField(){
     delete layout;
 }
 
-
 void DynamicField::b_clicked(){
     emit deleteField(this);
 }
 
+QString DynamicField::expression(){
+    return input_line->text();
+}
+
+bool DynamicField::visibility(){
+    return check_box->isChecked();
+}

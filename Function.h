@@ -6,17 +6,15 @@
 #include <stack>
 #define PI 3.14159265   
 
-using namespace std;
-
 class Function {
 private:
-    vector <string> expression;
+    std::vector <std::string> expression;
     bool Letter(char);
     bool Digit(char);
     bool Operation(char);
-    void CreateRPN(string);
+    void CreateRPN(std::string);
 public:
-    Function(string);
+    Function(std::string);
     float GetY(float); 
-    void Update(string);
+    void Update(std::string);
 };

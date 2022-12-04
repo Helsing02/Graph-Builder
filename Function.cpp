@@ -1,5 +1,9 @@
 ﻿#include "Function.h"
 
+using std::string;
+using std::stack;
+using std::map;
+using std::cout;
 
 bool Function::Letter(char c) {//Функция проверки символа выражения (является ли символ буквой)
     if ('a' <= c && c <= 'z') return true;

@@ -7,7 +7,8 @@
 
 #pragma once
 
-class DynamicField: public QObject{
+class DynamicField: public QObject
+{
     Q_OBJECT
 private:
     QLabel* fx;
@@ -20,8 +21,10 @@ private:
 
 public:
     DynamicField(QWidget* parent=0);
-    QLayout* getLayout();
     ~DynamicField();
+    QLayout* getLayout();
+    QString expression();
+    bool visibility();
 
 private slots:
     void b_clicked();

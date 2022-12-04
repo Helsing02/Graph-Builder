@@ -39,7 +39,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="lineEdit_2"/>
+           <widget class="QLineEdit" name="xMin"/>
           </item>
           <item>
            <widget class="QLabel" name="lbl_comma">
@@ -49,7 +49,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="lineEdit_4"/>
+           <widget class="QLineEdit" name="xMax"/>
           </item>
           <item>
            <widget class="QLabel" name="lbl_bracket1">
@@ -94,7 +94,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="lineEdit_9"/>
+           <widget class="QLineEdit" name="yMin"/>
           </item>
           <item>
            <widget class="QLabel" name="lbl_comma_4">
@@ -104,7 +104,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="lineEdit_10"/>
+           <widget class="QLineEdit" name="yMax"/>
           </item>
           <item>
            <widget class="QLabel" name="lbl_bracket1_3">
@@ -114,9 +114,12 @@
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="ch_Pi_3">
+           <widget class="QCheckBox" name="autoRange">
             <property name="text">
              <string>авто</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -147,7 +150,7 @@
       <item>
        <layout class="QGridLayout" name="gridLayout_5">
         <item row="1" column="1">
-         <widget class="QPushButton" name="pushButton">
+         <widget class="QPushButton" name="buildBtn">
           <property name="layoutDirection">
            <enum>Qt::RightToLeft</enum>
           </property>
