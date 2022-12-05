@@ -23,6 +23,8 @@ private slots:
     void build_graph();
     void disableY(int);
 
+    void on_pushButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     QVector <DynamicField*> fields;

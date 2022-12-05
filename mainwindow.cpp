@@ -2,6 +2,7 @@
 #include "./ui_mainwindow.h"
 #include <QLabel>
 #include <QColor>
+#include "reference.h"
 
 #include <iostream>
 
@@ -10,11 +11,12 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    this->setStyleSheet("background-color:rgb(255,228,181);");
+
     ui->xMin->setText("-10");
     ui->xMax->setText("10");
     ui->yMin->setEnabled(false);
     ui->yMax->setEnabled(false);
-
 
 
     collection = new FuncCollection;
@@ -22,7 +24,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->autoRange, SIGNAL(stateChanged(int)), this, SLOT(disableY(int)));
     QAbstractButton::connect(ui->addBtn, SIGNAL(clicked()), this, SLOT(add_Dfield()));
     QAbstractButton::connect(ui->buildBtn, SIGNAL(clicked()), this, SLOT(build_graph()));
-    //this->setStyleSheet("background-color:rgb(255,246,230);");
 }
 
 MainWindow::~MainWindow()
@@ -47,7 +48,7 @@ void MainWindow::add_Dfield()
     DynamicField* field_to_add= new DynamicField(this);
     connect(field_to_add, SIGNAL(deleteField(DynamicField*)), this, SLOT(delete_Dfield(DynamicField*)));
     fields.push_back(field_to_add);
-    //collection->AddFunc();
+    collection->AddFunc("1");
     ui->FuncLayoutMain->addLayout(field_to_add->getLayout());
 
 }
@@ -90,3 +91,11 @@ void MainWindow::disableY(int i){
     }
 
 }
+
+void MainWindow::on_pushButton_clicked()
+{
+    reference window;
+    window.setModal(true);
+    window.exec();
+}
+
