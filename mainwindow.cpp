@@ -3,6 +3,7 @@
 #include <QLabel>
 #include <QColor>
 #include "reference.h"
+#include "error.h"
 
 #include <iostream>
 
@@ -24,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->autoRange, SIGNAL(stateChanged(int)), this, SLOT(disableY(int)));
     QAbstractButton::connect(ui->addBtn, SIGNAL(clicked()), this, SLOT(add_Dfield()));
     QAbstractButton::connect(ui->buildBtn, SIGNAL(clicked()), this, SLOT(build_graph()));
+
 }
 
 MainWindow::~MainWindow()
@@ -98,4 +100,5 @@ void MainWindow::on_pushButton_clicked()
     window.setModal(true);
     window.exec();
 }
+
 

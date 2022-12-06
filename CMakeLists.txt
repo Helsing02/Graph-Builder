@@ -37,6 +37,10 @@ set(PROJECT_SOURCES
         reference.cpp
         reference.h
         reference.ui
+
+        error.cpp
+        error.h
+        error.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
