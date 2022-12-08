@@ -4,7 +4,9 @@
 #include <cmath>
 #include <map>
 #include <stack>
-#define PI 3.14159265   
+#include <algorithm>
+#define PI 3.14159265  
+#define MAX 2147483647
 
 class Function {
 private:
@@ -12,9 +14,10 @@ private:
     bool Letter(char);
     bool Digit(char);
     bool Operation(char);
-    void CreateRPN(std::string);
+    
 public:
-    Function(std::string);
-    float GetY(float); 
-    void Update(std::string);
+    Function();
+    int CreateRPN(std::string);
+    double GetY(double);
+    int Update(std::string);
 };
