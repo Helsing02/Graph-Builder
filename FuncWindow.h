@@ -20,6 +20,9 @@ public:
     void replot();
     void clearGraphs();
 
+private slots:
+    void on_pushButton_clicked();
+
 private:
     Ui::FuncWindow *ui;
     QCustomPlot *wGraphic;
