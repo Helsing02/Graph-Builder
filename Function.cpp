@@ -5,8 +5,6 @@ using std::stack;
 using std::map;
 using std::cout;
 
-Function::Function() {};
-
 bool Function::Letter(char c) {
     if ('a' <= c && c <= 'z') return true;
     return false;

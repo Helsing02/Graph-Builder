@@ -14,10 +14,9 @@ private:
     bool Letter(char);
     bool Digit(char);
     bool Operation(char);
+    int CreateRPN(std::string);
     
 public:
-    Function();
-    int CreateRPN(std::string);
     double GetY(double);
     int Update(std::string);
 };
