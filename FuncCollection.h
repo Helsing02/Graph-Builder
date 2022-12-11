@@ -5,14 +5,9 @@
 
 class FuncCollection
 {
-    std::vector <Function*> arr_function;
-    FuncWindow* canvas;
+    std::vector <Function*> arr_func;
 public:
-    FuncCollection();
     ~FuncCollection();
-    void AddFunc(std::string);
-    void DeleteFunc(int);
-    void RecastGraph(int, int, int, int);
-
-    void tempClear();
+    int add_func(std::string);
+    QVector<QVector<QVector<double>>> get_points(int, int);
 };

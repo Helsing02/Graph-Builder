@@ -1,51 +1,45 @@
 ﻿#include "FuncCollection.h"
 
-FuncCollection::FuncCollection(){
-    canvas=new FuncWindow();
-}
-
-void FuncCollection::AddFunc(std::string newfunc)
+int FuncCollection::add_func(std::string )
 {
-    arr_function.push_back(new Function(newfunc));
+    Function *obj = new Function;
+    int flag = obj->set_exp(new_func);
+    arr_func.push_back(obj);
+
+    return flag;
 }
 
-FuncCollection:: ~FuncCollection(){
-    for (Function* f: arr_function){
+FuncCollection:: ~FuncCollection()
+{
+    for (Function* f: arr_func)
+    {
         delete f;
     }
-    delete canvas;
 }
 
-void FuncCollection::DeleteFunc(int i)
+QVector<QVector<QVector<double>>> FuncCollection::get_points(int x_min, int x_max)
 {
-    arr_function.erase(arr_function.begin() + i);
-}
+    QVector<QVector<QVector<double>>> graphs;
+    QVector<QVector<double>> graph;
 
+    double delta=((double)x_max-(double)x_min)/10000;
 
-void FuncCollection::RecastGraph(int xMin, int xMax, int yMin, int yMax)
-{
-    canvas->changeSize(xMin, xMax, yMin, yMax);
-    int index=0;
-    double delta=((float)xMax-(float)xMin)/100000;
-    canvas->clearGraphs();
-    for (Function* f: arr_function){
+    for (Function* f: arr_func)
+    {
         QVector <double> x, y;
-        double i=xMin;
-        for(; i<=xMax; i+=delta){
+        double i=x_min;
+        for(; i<=x_max; i+=delta)
+        {
             x.push_back(i);
             y.push_back(f->GetY(i));
         }
-        canvas->addGraph(x, y, index);
-        index++;
-    }
-    canvas->replot();
-    canvas->show();
-}
 
-void FuncCollection::tempClear(){
-    for(Function* f: arr_function){
-        delete f;
+        graph.push_back(x);
+        graph.push_back(y);
+
+        graphs.push_back(graph);
     }
-    arr_function.clear();
+
+    return graphs;
 }
 
