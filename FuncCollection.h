@@ -1,12 +1,11 @@
 #include <vector>
 #include "Function.h"
-#include "FuncWindow.h"
 
 
 class FuncCollection
 {
     std::vector <Function*> arr_function;
-    FuncWindow* canvas;
+    //FuncWindow* canvas;
 public:
     FuncCollection();
     ~FuncCollection();

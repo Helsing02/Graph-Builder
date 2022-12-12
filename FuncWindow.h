@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include "qcustomplot.h"
+#include "FuncCollection.h"
+
 
 namespace Ui {
 class FuncWindow;
@@ -15,10 +17,13 @@ class FuncWindow : public QMainWindow
 public:
     explicit FuncWindow(QWidget *parent = nullptr);
     ~FuncWindow();
-    void addGraph(QVector <double>, QVector <double>, int);
-    void changeSize(int, int, int, int);
-    void replot();
-    void clearGraphs();
+    int add_func(std::string);
+    void add_graphs(int, int);
+    void change_size(int, int, int, int);
+
+private slots:
+    void rebuild();
+
 
 private:
     Ui::FuncWindow *ui;

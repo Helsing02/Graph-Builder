@@ -1,57 +1,47 @@
 #include "DynamicField.h"
 
-DynamicField::DynamicField(QWidget* parent){
-    fx =new QLabel(parent);
-    fx->setText("f(x)=");
+DynamicField::DynamicField(QWidget* parent):
+    QWidget(parent)
+{
 
-    input_line = new QLineEdit(parent);
+    m_fx =new QLabel(this);
+    m_fx->setText("f(x)=");
 
-    check_box = new QCheckBox(parent);
-    check_box->setText("Отображать");
-    check_box->setChecked(true);
+    m_input_line = new QLineEdit(this);
 
-    push_button = new QPushButton(parent);
-    push_button->setText("Удалить");
+    m_check_box = new QCheckBox(this);
+    m_check_box->setText("Отображать");
+    m_check_box->setChecked(true);
+
+    m_push_button = new QPushButton(this);
+    m_push_button->setText("Удалить");
+
+    m_layout=new QVBoxLayout(this);
+    m_upper=new QHBoxLayout(this);
+    m_lower=new QHBoxLayout(this);
+    m_layout->addLayout(m_upper);
+    m_layout->addLayout(m_lower);
+
+    m_lower->addStretch();
+    m_lower->addWidget(m_check_box);
+    m_lower->addWidget(m_push_button);
 
 
-    upper=new QHBoxLayout;
-    upper->addWidget(fx);
-    upper->addWidget(input_line);
+    m_upper->addWidget(m_fx);
+    m_upper->addWidget(m_input_line);
 
-    lower=new QHBoxLayout;
-    lower->addStretch();
-    lower->addWidget(check_box);
-    lower->addWidget(push_button);
+    QAbstractButton::connect(m_push_button, SIGNAL(clicked()), this, SLOT(b_clicked()));
 
-    layout=new QVBoxLayout;
-    layout->addLayout(upper);
-    layout->addLayout(lower);
-
-    QAbstractButton::connect(push_button, SIGNAL(clicked()), this, SLOT(b_clicked()));
-}
-
-QLayout* DynamicField::getLayout(){
-    return layout;
-}
-
-DynamicField::~DynamicField(){
-    delete fx;
-    delete input_line;
-    delete check_box;
-    delete push_button;
-    delete lower;
-    delete upper;
-    delete layout;
 }
 
 void DynamicField::b_clicked(){
     emit deleteField(this);
 }
 
-QString DynamicField::expression(){
-    return input_line->text();
+QString DynamicField::text(){
+    return m_input_line->text();
 }
 
 bool DynamicField::visibility(){
-    return check_box->isChecked();
+    return m_check_box->isChecked();
 }
