@@ -33,6 +33,14 @@ set(PROJECT_SOURCES
 
         qcustomplot.h
         qcustomplot.cpp
+
+        reference.cpp
+        reference.h
+        reference.ui
+
+        error.cpp
+        error.h
+        error.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

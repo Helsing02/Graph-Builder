@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>reference</class>
+ <widget class="QDialog" name="reference">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>604</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="1">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap>C:/Users/днс/OneDrive/Рабочий стол/in22aKgL-l8.jpg</pixmap>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Список математических функций:
+
+•ln(x), log(x) — натуральный логарифм
+•log(a)(x)-логарифм x по основанию a
+•sin(x) — синус
+•cos(x) — косинус
+•tg(x), tan(x)— тангенс
+•cotan(x), ctg(x)— котангенс
+•asin(x) — арксинус
+•acos(x) — арккосинус
+•atg(x), atan(x) — арктангенс
+•actg(x), acotan(x) — арккотангенс
+•sh(x), sinh(x) — гиперболический синус
+•ch(x), cosh(x) — гиперболический косинус
+•tanh(x) — гиперболический тангенс
+•cotanh(x) — гиперболический котангенс
+•asinh(x) — обратный гиперболический синус
+•acosh(x) — обратный гиперболический косинус
+•atanh(x) — обратный гиперболический тангенс
+•acotanh(x) — обратный гиперболический котангенс
+•exp(x), e^ — экспонента в степени x
+•abs(x)— модуль x
+•x^a— x в степени a
+•x^(1/a)— корень a-ой степени из x
+
+Константы:		Список операций:
+•pi— число пи		•*— умножение	•+— сложение
+•e— число e		•/— деление		•-— разность 
+</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

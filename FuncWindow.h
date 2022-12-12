@@ -25,6 +25,9 @@ private slots:
     void rebuild();
 
 
+private slots:
+    void on_pushButton_clicked();
+
 private:
     Ui::FuncWindow *ui;
     QCustomPlot *w_graphic;

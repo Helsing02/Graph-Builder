@@ -2,7 +2,8 @@
 #include "./ui_mainwindow.h"
 #include <QLabel>
 #include <QColor>
-#include <QScrollBar>
+#include "reference.h"
+#include "error.h"
 
 #include <iostream>
 
@@ -11,11 +12,12 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    this->setStyleSheet("background-color:rgb(255,228,181);");
+
     ui->xMin->setText("-10");
     ui->xMax->setText("10");
     ui->yMin->setEnabled(false);
     ui->yMax->setEnabled(false);
-
 
 
     collection = new FuncCollection;
@@ -91,3 +93,12 @@ void MainWindow::disable_y(int i){
         ui->yMax->setText(ui->xMax->text());
     }
 }
+
+void MainWindow::on_pushButton_clicked()
+{
+    reference window;
+    window.setModal(true);
+    window.exec();
+}
+
+

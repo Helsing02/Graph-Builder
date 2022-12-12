@@ -1,6 +1,10 @@
 #include "FuncWindow.h"
 #include "ui_funcwindow.h"
 
+#include <QGraphicsScene>
+#include <QPixmap>
+#include <QString>
+
 FuncWindow::FuncWindow(QWidget *parent)
     : QMainWindow(parent),
     ui(new Ui::FuncWindow)

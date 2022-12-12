@@ -1,4 +1,5 @@
 #include "DynamicField.h"
+#include <QScrollArea>
 
 DynamicField::DynamicField(QWidget* parent):
     QWidget(parent)

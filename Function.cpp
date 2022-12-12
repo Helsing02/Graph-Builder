@@ -27,7 +27,7 @@ bool Function::operation(char c) {
     return false;
 }
 
-int Function::create_RPN(string s) {
+int Function::set_rpn(string s) {
     transform(s.begin(), s.end(), s.begin(), tolower);
     map <string, int> operationPriority = { { "(", 0 },
                                 { "+", 1 },
@@ -64,6 +64,7 @@ int Function::create_RPN(string s) {
     int brackets = 0;
     int dig = 0;
     bool checkabs = false;
+    int root = 0;
 
     for (int i = 0; i < len; i++) {
         if (digit(s[i])) {
@@ -84,7 +85,7 @@ int Function::create_RPN(string s) {
         else if (operation(s[i])) {
             if ((s[i] != '-') && ((i == 0) || operation(s[i - 1])))  return 3;
             symbols = s[i];
-            if ((s[i]=='-') && (i == 0 || operation(s[i-1]) || s[i - 1] == '(' || (s[i - 1] == '|'  && checkabs==true))) symbols = "~";
+            if ((s[i] == '-') && (i == 0 || operation(s[i - 1]) || s[i - 1] == '(' || (s[i - 1] == '|' && checkabs == true))) symbols = "~";
             while ((!Stek.empty()) && (operationPriority[Stek.top()] >= operationPriority[symbols])) {
                 m_expression.push_back(Stek.top());
                 Stek.pop();
@@ -314,7 +315,7 @@ int Function::create_RPN(string s) {
                 brackets++;
                 break;
             case ')':
-                if ((i == 0) || (brackets==0)) return 1;
+                if ((i == 0) || (brackets == 0)) return 1;
                 while ((!Stek.empty()) && (Stek.top() != "(")) {
                     m_expression.push_back(Stek.top());
                     Stek.pop();
@@ -341,6 +342,14 @@ int Function::create_RPN(string s) {
     return 0;
 }
 
+int Function::set_exp(string s) {
+    while (!m_expression.empty()) {
+        m_expression.pop_back();
+    }
+    int numberoferror = set_rpn(s);
+    return numberoferror;
+}
+
 double Function::get_y(double x) {
     stack <double> Stek1;
     double first = 0;
@@ -348,9 +357,9 @@ double Function::get_y(double x) {
 
     for (string s : m_expression) {
         if (digit(s[0])) {
-            double l=0, number = 0;
+            double l = 0, number = 0;
             for (int j = 0; j < s.length(); j++) {
-                if (s[j] == '.') l = s.length() - j-1;
+                if (s[j] == '.') l = s.length() - j - 1;
                 else number = number * 10 + ((double)s[j] - 48);
             }
             number = number / pow(10, l);
@@ -377,7 +386,6 @@ double Function::get_y(double x) {
                 break;
             case '^':
                 double z = pow(first, second);
-                //if (second < 0) z = 1.0 / z;
                 Stek1.push(z);
                 break;
             }
@@ -394,7 +402,6 @@ double Function::get_y(double x) {
                 Stek1.pop();
                 first = Stek1.top();
                 Stek1.pop();
-                //if (first == 1 || first < 0) return MAX;
                 double z = (log10(second)) / (log10(first));
                 Stek1.push(z);
             }
@@ -412,7 +419,7 @@ double Function::get_y(double x) {
                 else if (s == "tanh()") Stek1.push(tanh(first));
                 else if (s == "cotan()") Stek1.push(1 / (tan(first)));
                 else if (s == "cotanh()") {
-                    double z = (exp(first) + exp(0 - first)) / (exp(first) - exp(0 - first));
+                    double z = (exp(first) + exp(0.0 - first)) / (exp(first) - exp(0.0 - first));
                     Stek1.push(z);
                 }
                 else if (s == "asin()") Stek1.push(asin(first));
@@ -421,16 +428,16 @@ double Function::get_y(double x) {
                 else if (s == "acosh()") Stek1.push(acosh(first));
                 else if (s == "atan()") Stek1.push(atan(first));
                 else if (s == "atanh()") Stek1.push(atanh(first));
-                else if (s == "acotan()") Stek1.push(PI / 2 - atan(first));
+                else if (s == "acotan()") Stek1.push(PI / 2.0 - atan(first));
                 else if (s == "acotanh()") {
-                    double z = 1 / 2 * ((first + 1) / (first - 1));
+                    double z = 1.0 / 2 * log((first + 1) / (first - 1));
                     Stek1.push(z);
                 }
                 else if (s == "log()") Stek1.push(log(first));
                 else if (s == "log10()") Stek1.push(log10(first));
                 else if (s == "exp()") Stek1.push(exp(first));
                 else if (s == "abs()") Stek1.push(abs(first));
-                else if (s == "grad()") Stek1.push(first*(PI/180));
+                else if (s == "grad()") Stek1.push(first * (PI / 180));
                 else {
                     cout << "Error when finding Y";
                     exit(0);
@@ -445,11 +452,4 @@ double Function::get_y(double x) {
     first = Stek1.top();
     Stek1.pop();
     return first;
-}
-int Function::set_exp(string s) {
-    while (!m_expression.empty()) {
-        m_expression.pop_back();
-    }
-    int numberoferror = create_RPN(s);
-    return numberoferror;
 }
