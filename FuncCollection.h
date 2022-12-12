@@ -1,17 +1,21 @@
 #include <vector>
 #include "Function.h"
+<<<<<<< HEAD
 
 
 class FuncCollection
 {
     std::vector <Function*> arr_function;
     //FuncWindow* canvas;
-public:
-    FuncCollection();
-    ~FuncCollection();
-    void AddFunc(std::string);
-    void DeleteFunc(int);
-    void RecastGraph(int, int, int, int);
+=======
+#include <QVector>
 
-    void tempClear();
+class FuncCollection
+{
+    std::vector <Function*> arr_func;
+>>>>>>> Vlad
+public:
+    ~FuncCollection();
+    int add_func(std::string);
+    QVector<QVector<QVector<double>>> get_points(int, int);
 };

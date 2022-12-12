@@ -4,17 +4,18 @@
 #include <cmath>
 #include <map>
 #include <stack>
+
 #define PI 3.14159265   
 
-class Function {
+class Function
+{
 private:
-    std::vector <std::string> expression;
-    bool Letter(char);
-    bool Digit(char);
-    bool Operation(char);
-    void CreateRPN(std::string);
+    std::vector <std::string> m_expression;
+    bool letter(char);
+    bool digit(char);
+    bool operation(char);
+    int create_RPN(std::string);
 public:
-    Function(std::string);
-    float GetY(float); 
-    void Update(std::string);
+    double get_y(double);
+    int set_exp(std::string);
 };

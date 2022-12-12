@@ -7,10 +7,10 @@ FuncWindow::FuncWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    wGraphic = new QCustomPlot();
-    ui->gridLayout->addWidget(wGraphic);
-
-
+    w_graphic = new QCustomPlot();
+    ui->gridLayout->addWidget(w_graphic);
+    w_graphic->setInteraction(QCP::iRangeDrag, true);
+    w_graphic->setInteraction(QCP::iRangeZoom, true);
 }
 
 FuncWindow::~FuncWindow()
@@ -18,24 +18,53 @@ FuncWindow::~FuncWindow()
     delete ui;
 }
 
-void FuncWindow::changeSize(int xMin, int xMax, int yMin, int yMax)
+void FuncWindow::change_size(int x_min, int x_max, int y_min, int y_max)
 {
-    wGraphic->xAxis->setRange(xMin, xMax);
-    wGraphic->yAxis->setRange(yMin, yMax);
+    w_graphic->xAxis->setRange(x_min, x_max);
+    w_graphic->yAxis->setRange(y_min, y_max);
+
+    cur_max_x = x_max;
+    cur_min_x = x_min;
 }
 
-void FuncWindow::addGraph(QVector <double> x, QVector <double> y, int index)
+void FuncWindow::add_graphs(int x_min, int x_max)
 {
-    wGraphic->addGraph(wGraphic->xAxis, wGraphic->yAxis);
-    wGraphic->graph(index)->setData(x, y);
-    wGraphic->replot();
+    QVector<QVector<QVector<double>>> graphs;
+    graphs = m_func_collection.get_points(x_min, x_max);
+
+    w_graphic->xAxis->setLabel("x");
+    w_graphic->yAxis->setLabel("y");
+
+    for(QVector<QVector<double>> m_graph: graphs)
+    {
+        int index = 0;
+
+        w_graphic->addGraph(w_graphic->xAxis, w_graphic->yAxis);
+        w_graphic->graph(index)->setData(m_graph[0], m_graph[1]);
+    }
+
+    w_graphic->replot();
 }
 
-void FuncWindow::clearGraphs(){
-    wGraphic->clearGraphs();
+int FuncWindow::add_func(std::string new_func)
+{
+    return m_func_collection.add_func(new_func);
 }
 
-void FuncWindow::replot(){
-    wGraphic->replot();
-}
+void FuncWindow::rebuild()
+{
+    int start_p, end_p;
+    if((int)w_graphic->xAxis->range().upper > cur_max_x)
+    {
+        start_p = cur_max_x;
+        end_p = (int)w_graphic->xAxis->range().upper;
+    }
+    else
+    {
+        start_p = cur_min_x;
+        end_p = (int)w_graphic->xAxis->range().lower;
+    }
 
+    this->add_graphs(start_p, end_p);
+    w_graphic->replot();
+}
