@@ -1,9 +1,18 @@
 #include "DynamicField.h"
 #include <QScrollArea>
 
+using std::string;
+
 DynamicField::DynamicField(QWidget* parent){
     fx =new QLabel(parent);
-    fx->setText("f(x)=");
+//    fx->setText("f(x)=");
+//    string color[]={"#9AD35F", "#ecf96a", "e75480", "#89cfef", "ffd1dc", "#d7b8e9"};
+//    int i=rand() % (6);
+//    string str=color[i];
+
+    fx->setText("<font color='blue'>f(x)=</font>");
+    //fx->setText("QLabel{color:rgb(100,228,181);");
+
 
     input_line = new QLineEdit(parent);
 

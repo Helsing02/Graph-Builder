@@ -14,7 +14,6 @@ FuncWindow::FuncWindow(QWidget *parent)
     wGraphic = new QCustomPlot();
     ui->horizontalLayout_2->addWidget(wGraphic);
     this->setStyleSheet("background-color:rgb(255,255,255);");
-
 }
 
 FuncWindow::~FuncWindow()
@@ -33,7 +32,10 @@ void FuncWindow::addGraph(QVector <double> x, QVector <double> y, int index)
     wGraphic->addGraph(wGraphic->xAxis, wGraphic->yAxis);
     wGraphic->graph(index)->setData(x, y);
 
+//    wGraphic->setBackground(QBrush(QColor("#dcb9ff")));
+
     wGraphic->replot();
+
 
     wGraphic->setInteraction(QCP::iRangeZoom, true);
     wGraphic->setInteraction(QCP::iRangeDrag, true);
@@ -49,6 +51,7 @@ void FuncWindow::replot(){
     wGraphic->setInteraction(QCP::iRangeZoom, true);
     wGraphic->setInteraction(QCP::iRangeDrag, true);
 }
+
 
 
 void FuncWindow::on_pushButton_clicked()

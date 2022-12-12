@@ -6,27 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>604</height>
+    <width>1007</width>
+    <height>627</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="1">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string/>
-     </property>
-     <property name="pixmap">
-      <pixmap>C:/Users/днс/OneDrive/Рабочий стол/in22aKgL-l8.jpg</pixmap>
-     </property>
-     <property name="scaledContents">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
@@ -38,20 +25,21 @@
 •cos(x) — косинус
 •tg(x), tan(x)— тангенс
 •cotan(x), ctg(x)— котангенс
-•asin(x) — арксинус
-•acos(x) — арккосинус
-•atg(x), atan(x) — арктангенс
-•actg(x), acotan(x) — арккотангенс
+•asin(x), arcsin(x) — арксинус
+•acos(x), arccos(x) — арккосинус
+•atg(x), atan(x), arctg(x), arctan(x) — арктангенс
+•actg(x), acotan(x), arcctg(x), arcotan(x) — арккотангенс
 •sh(x), sinh(x) — гиперболический синус
 •ch(x), cosh(x) — гиперболический косинус
-•tanh(x) — гиперболический тангенс
-•cotanh(x) — гиперболический котангенс
-•asinh(x) — обратный гиперболический синус
-•acosh(x) — обратный гиперболический косинус
-•atanh(x) — обратный гиперболический тангенс
-•acotanh(x) — обратный гиперболический котангенс
+•tanh(x),  tgh(x) — гиперболический тангенс
+•cotanh(x), ctgh(x) — гиперболический котангенс
+•asinh(x), arcsinh(x) — обратный гиперболический синус
+•acosh(x), arccosh(x) — обратный гиперболический косинус
+•atanh(x), arctanh(x), atgh(x), arctgh(x) — обратный гиперболический тангенс
+•acotanh(x), arccotanh(x), actgh(x), arcctgh(x) — обратный гиперболический котангенс
 •exp(x), e^ — экспонента в степени x
 •abs(x)— модуль x
+•grad(x)— градусы x
 •x^a— x в степени a
 •x^(1/a)— корень a-ой степени из x
 
@@ -59,6 +47,19 @@
 •pi— число пи		•*— умножение	•+— сложение
 •e— число e		•/— деление		•-— разность 
 </string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap>C:/Users/днс/Downloads/in22aKgL-l8.jpg</pixmap>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
      </property>
     </widget>
    </item>

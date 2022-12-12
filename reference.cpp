@@ -8,6 +8,9 @@ reference::reference(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setStyleSheet("background-color:rgb(255,228,181);");
+    //КАРТИНКИ ПУТЬ ARGV[0]
+    //label_2
+
 }
 
 reference::~reference()

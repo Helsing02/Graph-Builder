@@ -4,6 +4,7 @@
 #include <QPushButton>
 #include <QLayout>
 #include <QSpacerItem>
+#include <string>
 
 #pragma once
 
