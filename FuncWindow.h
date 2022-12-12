@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "qcustomplot.h"
+#include "FuncCollection.h"
 
 namespace Ui
 {
@@ -23,6 +24,9 @@ private:
 
     Ui::FuncWindow *ui;
     QCustomPlot *w_graphic;
+    FuncCollection m_func_collection;
+    int cur_min_x;
+    int cur_max_x;
     void rebuild();
 };
 

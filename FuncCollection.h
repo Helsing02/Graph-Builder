@@ -1,7 +1,6 @@
 #include <vector>
 #include "Function.h"
-#include "FuncWindow.h"
-
+#include <QVector>
 
 class FuncCollection
 {
