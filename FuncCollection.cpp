@@ -1,6 +1,6 @@
 ﻿#include "FuncCollection.h"
 
-int FuncCollection::add_func(std::string )
+int FuncCollection::add_func(std::string new_func)
 {
     Function *obj = new Function;
     int flag = obj->set_exp(new_func);
@@ -17,21 +17,21 @@ FuncCollection:: ~FuncCollection()
     }
 }
 
-QVector<QVector<QVector<double>>> FuncCollection::get_points(int x_min, int x_max)
+QVector<QVector<QVector<double>>> FuncCollection::get_points(double x_min, double x_max)
 {
     QVector<QVector<QVector<double>>> graphs;
-    QVector<QVector<double>> graph;
 
-    double delta=((double)x_max-(double)x_min)/10000;
+    double delta=(x_max-x_min)/1000;
 
     for (Function* f: arr_func)
     {
+        QVector<QVector<double>> graph;
         QVector <double> x, y;
         double i=x_min;
         for(; i<=x_max; i+=delta)
         {
             x.push_back(i);
-            y.push_back(f->GetY(i));
+            y.push_back(f->get_y(i));
         }
 
         graph.push_back(x);

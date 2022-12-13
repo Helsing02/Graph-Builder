@@ -36,7 +36,7 @@ DynamicField::DynamicField(QWidget* parent):
 }
 
 void DynamicField::b_clicked(){
-    emit deleteField(this);
+    emit delete_field(this);
 }
 
 QString DynamicField::text(){

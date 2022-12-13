@@ -27,7 +27,7 @@ public:
 private slots:
     void b_clicked();
 signals:
-    void deleteField(DynamicField*);
+    void delete_field(DynamicField*);
 
 
 

@@ -12,20 +12,16 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    this->setStyleSheet("background-color:rgb(255,228,181);");
 
     ui->xMin->setText("-10");
     ui->xMax->setText("10");
     ui->yMin->setEnabled(false);
     ui->yMax->setEnabled(false);
 
-
-    collection = new FuncCollection;
-    add_Dfield();
-    connect(ui->autoRange, SIGNAL(stateChanged(int)), this, SLOT(disableY(int)));
-    connect(ui->addBtn, SIGNAL(clicked()), this, SLOT(add_Dfield()));
+    add_dynamic_f();
+    connect(ui->autoRange, SIGNAL(stateChanged(int)), this, SLOT(disable_y(int)));
+    connect(ui->addBtn, SIGNAL(clicked()), this, SLOT(add_dynamic_f()));
     connect(ui->buildBtn, SIGNAL(clicked()), this, SLOT(build_graph()));
-    //this->setStyleSheet("background-color:rgb(255,246,230);");
 }
 
 MainWindow::~MainWindow()
@@ -36,14 +32,14 @@ MainWindow::~MainWindow()
 
 void MainWindow::delete_dynamic_f(DynamicField* df){
     fields.remove(fields.indexOf(df));
-    ui->FuncLayout->removeWidget(df);
+    //ui->FuncLayout->removeWidget(df);
     delete df;
 }
 
 void MainWindow::add_dynamic_f()
 {
     DynamicField* df= new DynamicField(this);
-    connect(df, SIGNAL(deleteField(DynamicField*)), this, SLOT(delete_Dfield(DynamicField*)));
+    connect(df, SIGNAL(delete_field(DynamicField*)), this, SLOT(delete_dynamic_f(DynamicField*)));
     fields.push_back(df);
     ui->FuncLayout->addWidget(df);
 }
@@ -63,7 +59,7 @@ void MainWindow::build_graph(){
     int x_min=((ui->xMin)->text()).toInt(), x_max=((ui->xMax)->text()).toInt(), y_min, y_max;
 
     func_window->add_graphs(x_min, x_max);
-
+    func_window->change_size(x_min, x_max, x_min, x_max);
 
     func_window->show();
     /*
