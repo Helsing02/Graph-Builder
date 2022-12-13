@@ -4,7 +4,6 @@
 #include <QColor>
 #include "reference.h"
 #include "error.h"
-
 #include <iostream>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -12,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    this->setStyleSheet("background-color:rgb(255,228,181);");
+    //this->setStyleSheet("background-color:rgb(255,228,181);");
 
     ui->xMin->setText("-10");
     ui->xMax->setText("10");

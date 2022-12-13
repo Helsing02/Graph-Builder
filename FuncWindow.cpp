@@ -13,7 +13,7 @@ FuncWindow::FuncWindow(QWidget *parent)
 
     wGraphic = new QCustomPlot();
     ui->horizontalLayout_2->addWidget(wGraphic);
-    this->setStyleSheet("background-color:rgb(255,255,255);");
+//    this->setStyleSheet("background-color:rgb(255,255,255);");
 }
 
 FuncWindow::~FuncWindow()
