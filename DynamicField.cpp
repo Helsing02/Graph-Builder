@@ -1,61 +1,42 @@
 #include "DynamicField.h"
+#include <QColorDialog>
 
-using std::string;
+DynamicField::DynamicField(QWidget* parent):
+    QWidget(parent)
+{
 
-DynamicField::DynamicField(QWidget* parent){
-    fx =new QLabel(parent);
-    fx->setText("f(x)=");
+    m_fx =new QLabel(this);
+    m_fx->setText("f(x)=");
 
-    input_line = new QLineEdit(parent);
+    m_input_line = new QLineEdit(this);
 
-    check_box = new QCheckBox(parent);
-    check_box->setText("Отображать");
-    check_box->setChecked(true);
+    m_check_box = new QCheckBox(this);
+    m_check_box->setText("Отображать");
+    m_check_box->setChecked(true);
 
-    push_button = new QPushButton(parent);
-    push_button->setText("Удалить");
+    m_push_button = new QPushButton(this);
+    m_push_button->setText("Удалить");
 
-    upper=new QHBoxLayout;
-    upper->addWidget(fx);
-    upper->addWidget(input_line);
+    m_layout=new QVBoxLayout(this);
+    m_upper=new QHBoxLayout(this);
+    m_lower=new QHBoxLayout(this);
+    m_layout->addLayout(m_upper);
+    m_layout->addLayout(m_lower);
 
-    lower=new QHBoxLayout;
-    lower->addStretch();
-    lower->addWidget(check_box);
-    lower->addWidget(push_button);
-
-    //для цвета
-    push_button_2=new QPushButton(parent);
-    push_button_2->setText("Цвет");
-    lower->addWidget(push_button_2);
+    m_lower->addStretch();
+    m_lower->addWidget(m_check_box);
+    m_lower->addWidget(m_push_button);
 
 
-    layout=new QVBoxLayout;
-    layout->addLayout(upper);
-    layout->addLayout(lower);
+    m_upper->addWidget(m_fx);
+    m_upper->addWidget(m_input_line);
 
-    QAbstractButton::connect(push_button, SIGNAL(clicked()), this, SLOT(b_clicked()));
-    QAbstractButton::connect(push_button_2, SIGNAL(clicked()), this, SLOT(c_2_clicked()));
-}
+    QAbstractButton::connect(m_push_button, SIGNAL(clicked()), this, SLOT(b_clicked()));
 
-QLayout* DynamicField::getLayout(){
-    return layout;
-}
-
-DynamicField::~DynamicField(){
-    delete fx;
-    delete input_line;
-    delete check_box;
-    delete push_button;
-    delete lower;
-    delete upper;
-    delete layout;
-
-    delete push_button_2;
 }
 
 void DynamicField::b_clicked(){
-    emit deleteField(this);
+    emit delete_field(this);
 }
 //для цвета
 void DynamicField::c_2_clicked(){
@@ -63,10 +44,10 @@ void DynamicField::c_2_clicked(){
     qDebug()<<ColorValue;
 }
 
-QString DynamicField::expression(){
-    return input_line->text();
+QString DynamicField::text(){
+    return m_input_line->text();
 }
 
 bool DynamicField::visibility(){
-    return check_box->isChecked();
+    return m_check_box->isChecked();
 }

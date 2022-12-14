@@ -3,29 +3,35 @@
 
 #include <QMainWindow>
 #include "qcustomplot.h"
+#include "FuncCollection.h"
 
-namespace Ui {
+namespace Ui
+{
 class FuncWindow;
 }
 
 class FuncWindow : public QMainWindow
 {
     Q_OBJECT
-
 public:
+
     explicit FuncWindow(QWidget *parent = nullptr);
     ~FuncWindow();
-    void addGraph(QVector <double>, QVector <double>, int);
-    void changeSize(int, int, int, int);
-    void replot();
-    void clearGraphs();
+    int add_func(std::string new_func);
+    void add_graphs(double x_min, double x_max);
+    void change_size(int, int, int, int);
 
 private slots:
-    void on_pushButton_clicked();
+    void rebuild(QCPRange,QCPRange);
 
+/*
+private slots:
+    void on_pushButton_clicked();
+*/
 private:
     Ui::FuncWindow *ui;
-    QCustomPlot *wGraphic;
+    QCustomPlot *w_graphic;
+    FuncCollection m_func_collection;
 };
 
 #endif // FUNCWINDOW_H

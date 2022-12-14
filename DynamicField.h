@@ -1,3 +1,5 @@
+#pragma once
+
 #include <QLabel>
 #include <QLineEdit>
 #include <QCheckBox>
@@ -6,37 +8,29 @@
 #include <QSpacerItem>
 #include <string>
 
-#include <QColorDialog>
-#include <QColor>
-#include <QPalette>
-#include <QDebug>
-
-#pragma once
-
-class DynamicField: public QObject
+class DynamicField: public QWidget
 {
     Q_OBJECT
 private:
-    QLabel* fx;
-    QLineEdit* input_line;
-    QCheckBox* check_box;
-    QPushButton* push_button;
-    QPushButton* push_button_2;
-    QVBoxLayout* layout;
-    QHBoxLayout* upper;
-    QHBoxLayout* lower;
+    QLabel* m_fx;
+    QLineEdit* m_input_line;
+    QCheckBox* m_check_box;
+    QPushButton* m_push_button;
+    QVBoxLayout* m_layout;
+    QHBoxLayout* m_upper;
+    QHBoxLayout* m_lower;
 
 public:
-    DynamicField(QWidget* parent=0);
-    ~DynamicField();
-    QLayout* getLayout();
-    QString expression();
+    DynamicField(QWidget* parent=nullptr);
+    QString text();
     bool visibility();
 
 private slots:
     void b_clicked();
     void c_2_clicked();
 signals:
-    void deleteField(DynamicField*);
-    void colorGraphic(DynamicField*);
+    void delete_field(DynamicField*);
+
+
+
 };
