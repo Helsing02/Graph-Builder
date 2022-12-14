@@ -6,17 +6,17 @@
 #include <stack>
 #include <algorithm>
 #define PI 3.14159265  
-#define MAX 2147483647
 
-class Function {
+class Function
+{
 private:
-    std::vector <std::string> expression;
-    bool Letter(char);
-    bool Digit(char);
-    bool Operation(char);
-    int CreateRPN(std::string);
+    std::vector <std::string> m_expression;
+    bool letter(char);
+    bool digit(char);
+    bool operation(char);
+    int set_rpn(std::string);
     
 public:
-    double GetY(double);
-    int Update(std::string);
+    int set_exp(std::string);
+    double get_y(double);
 };

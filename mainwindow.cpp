@@ -12,61 +12,59 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    this->setStyleSheet("background-color:rgb(255,228,181);");
 
     ui->xMin->setText("-10");
     ui->xMax->setText("10");
     ui->yMin->setEnabled(false);
     ui->yMax->setEnabled(false);
 
-
-    collection = new FuncCollection;
-    add_Dfield();
-    connect(ui->autoRange, SIGNAL(stateChanged(int)), this, SLOT(disableY(int)));
-    QAbstractButton::connect(ui->addBtn, SIGNAL(clicked()), this, SLOT(add_Dfield()));
-    QAbstractButton::connect(ui->buildBtn, SIGNAL(clicked()), this, SLOT(build_graph()));
-
+    add_dynamic_f();
+    connect(ui->autoRange, SIGNAL(stateChanged(int)), this, SLOT(disable_y(int)));
+    connect(ui->addBtn, SIGNAL(clicked()), this, SLOT(add_dynamic_f()));
+    connect(ui->buildBtn, SIGNAL(clicked()), this, SLOT(build_graph()));
 }
 
 MainWindow::~MainWindow()
 {
-    for (DynamicField* df: fields){
-        delete df;
-    }
-    delete collection;
     delete ui;
 }
 
 
-void MainWindow::delete_Dfield(DynamicField* df){
-    collection->DeleteFunc(fields.indexOf(df));
+void MainWindow::delete_dynamic_f(DynamicField* df){
     fields.remove(fields.indexOf(df));
-    ui->FuncLayoutMain->removeItem(df->getLayout());
+    //ui->FuncLayout->removeWidget(df);
     delete df;
 }
 
-void MainWindow::add_Dfield()
+void MainWindow::add_dynamic_f()
 {
-    DynamicField* field_to_add= new DynamicField(this);
-    connect(field_to_add, SIGNAL(deleteField(DynamicField*)), this, SLOT(delete_Dfield(DynamicField*)));
-    fields.push_back(field_to_add);
-    collection->AddFunc("1");
-    ui->FuncLayoutMain->addLayout(field_to_add->getLayout());
-
+    DynamicField* df= new DynamicField(this);
+    connect(df, SIGNAL(delete_field(DynamicField*)), this, SLOT(delete_dynamic_f(DynamicField*)));
+    fields.push_back(df);
+    ui->FuncLayout->addWidget(df);
 }
 
 void MainWindow::build_graph(){
-    collection->tempClear();
+    FuncWindow* func_window=new FuncWindow;
     for (DynamicField* df: fields){
         if (df->visibility()){
-            collection->AddFunc((df->expression()).toStdString());
-            std::cout<<(df->expression()).toStdString()<<std::endl;
+            if (func_window->add_func(df->text().toStdString())){
+                // ошибка ввода
+            }
+            std::cout<<(df->text()).toStdString()<<std::endl;
         }
     }
+
     std::cout<<std::endl;
-    int xMin=((ui->xMin)->text()).toInt(), xMax=((ui->xMax)->text()).toInt(), yMin, yMax;
+    int x_min=((ui->xMin)->text()).toInt(), x_max=((ui->xMax)->text()).toInt(), y_min, y_max;
+
+    func_window->add_graphs(x_min, x_max);
+    func_window->change_size(x_min, x_max, x_min, x_max);
+
+    func_window->show();
+    /*
     if (ui->autoRange->isChecked()){
-        yMin=xMin;
+        y_min=xin;
         yMax=xMax;
     } else {
         yMin=((ui->yMin)->text()).toInt();
@@ -76,12 +74,11 @@ void MainWindow::build_graph(){
         xMin*=3.14;
         xMax*=3.14;
     }
-    collection->RecastGraph(xMin, xMax, yMin, yMax);
-
+    */
 
 }
 
-void MainWindow::disableY(int i){
+void MainWindow::disable_y(int i){
     ui->yMin->setEnabled(!i);
     ui->yMax->setEnabled(!i);
     if (i){
@@ -91,14 +88,14 @@ void MainWindow::disableY(int i){
         ui->yMin->setText(ui->xMin->text());
         ui->yMax->setText(ui->xMax->text());
     }
-
 }
 
 void MainWindow::on_pushButton_clicked()
 {
     reference window;
-    window.setModal(true);
-    window.exec();
+    //window.setModal(false);
+    window.show();
+
 }
 
 

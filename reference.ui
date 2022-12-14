@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>reference</class>
- <widget class="QDialog" name="reference">
+ <widget class="QWindow" name="reference">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -18,9 +18,6 @@
     <widget class="QLabel" name="label_2">
      <property name="text">
       <string/>
-     </property>
-     <property name="pixmap">
-      <pixmap>C:/Users/днс/OneDrive/Рабочий стол/in22aKgL-l8.jpg</pixmap>
      </property>
      <property name="scaledContents">
       <bool>true</bool>
