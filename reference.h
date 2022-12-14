@@ -1,18 +1,18 @@
 #ifndef REFERENCE_H
 #define REFERENCE_H
 
-#include <QDialog>
+#include <QWindow>
 
 namespace Ui {
 class reference;
 }
 
-class reference : public QDialog
+class reference : public QWindow
 {
     Q_OBJECT
 
 public:
-    explicit reference(QWidget *parent = nullptr);
+    explicit reference(QWindow *parent = nullptr);
     ~reference();
 
 private:

@@ -93,8 +93,9 @@ void MainWindow::disable_y(int i){
 void MainWindow::on_pushButton_clicked()
 {
     reference window;
-    window.setModal(true);
-    window.exec();
+    //window.setModal(false);
+    window.show();
+
 }
 
 
