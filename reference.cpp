@@ -7,8 +7,6 @@ reference::reference(QWindow *parent) :
     ui(new Ui::reference)
 {
     ui->setupUi(this);
-    this->setStyleSheet("background-color:rgb(255,228,181);");
-    //setModal(false);
 }
 
 reference::~reference()

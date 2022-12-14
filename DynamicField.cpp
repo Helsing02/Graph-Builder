@@ -1,5 +1,4 @@
 #include "DynamicField.h"
-#include <QScrollArea>
 
 DynamicField::DynamicField(QWidget* parent):
     QWidget(parent)
@@ -37,6 +36,11 @@ DynamicField::DynamicField(QWidget* parent):
 
 void DynamicField::b_clicked(){
     emit delete_field(this);
+}
+//для цвета
+void DynamicField::c_2_clicked(){
+    QColor ColorValue=QColorDialog::getColor(Qt::white);
+    qDebug()<<ColorValue;
 }
 
 QString DynamicField::text(){

@@ -4,7 +4,6 @@
 #include <QColor>
 #include "reference.h"
 #include "error.h"
-
 #include <iostream>
 
 MainWindow::MainWindow(QWidget *parent)

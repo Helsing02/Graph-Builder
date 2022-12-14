@@ -6,6 +6,7 @@
 #include <QPushButton>
 #include <QLayout>
 #include <QSpacerItem>
+#include <string>
 
 class DynamicField: public QWidget
 {
@@ -26,6 +27,7 @@ public:
 
 private slots:
     void b_clicked();
+    void c_2_clicked();
 signals:
     void delete_field(DynamicField*);
 

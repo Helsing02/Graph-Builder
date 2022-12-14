@@ -7,7 +7,6 @@ error::error(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setStyleSheet("background-color:rgb(255,255,255);");
-
 }
 
 error::~error()
