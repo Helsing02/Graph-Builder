@@ -2,8 +2,9 @@
 #include "./ui_mainwindow.h"
 #include <QLabel>
 #include <QColor>
-#include "reference.h"
+
 #include "error.h"
+#include "ref.h"
 #include <iostream>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -91,9 +92,8 @@ void MainWindow::disable_y(int i){
 
 void MainWindow::on_pushButton_clicked()
 {
-    reference window;
-    //window.setModal(false);
-    window.show();
+    Ref* window=new Ref;
+    window->show();
 
 }
 

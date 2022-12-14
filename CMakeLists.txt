@@ -34,9 +34,9 @@ set(PROJECT_SOURCES
         qcustomplot.h
         qcustomplot.cpp
 
-        reference.cpp
-        reference.h
-        reference.ui
+        ref.cpp
+        ref.h
+        ref.ui
 
         error.cpp
         error.h

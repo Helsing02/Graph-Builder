@@ -35,8 +35,15 @@ void FuncWindow::change_size(int x_min, int x_max, int y_min, int y_max)
 void FuncWindow::add_graphs(double x_min, double x_max)
 {
     QVector<QVector<QVector<double>>> graphs;
-    graphs = m_func_collection.get_points(x_min, x_max);
 
+    graphs = m_func_collection.get_points(x_min, x_max);
+    for (QVector<QVector<double>> graph: graphs){
+        std::cout<<graph[0].length()<<" "<<graph[1].length()<<std::endl;
+        for(double d: graph[1]){
+            std::cout<<d<<std::endl;
+        }
+    }
+    std::cout<<"All!";
     int index = 0;
     for(QVector<QVector<double>> m_graph: graphs)
     {

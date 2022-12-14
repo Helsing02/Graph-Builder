@@ -1,4 +1,5 @@
 #include "DynamicField.h"
+#include <QColorDialog>
 
 DynamicField::DynamicField(QWidget* parent):
     QWidget(parent)
