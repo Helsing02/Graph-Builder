@@ -47,6 +47,7 @@ int Function::set_rpn(string s) {
                                 { "grad()", 5 },
                                 { "exp()", 5 },
                                 { "root()", 5 },
+                                { "sgn()", 5 },
                                 { "log()", 5 },
                                 { "log10()", 5 },
                                 { "loga()", 5 } };
@@ -61,13 +62,14 @@ int Function::set_rpn(string s) {
             if (i > 0) {
                 previous = i - 1;
                 while (previous > 0 && s[previous] == ' ') previous--;
-                if (previous >= 0 && (!operation(s[previous]) && s[previous] != '(' && s[previous] != ',' && s[previous] != ' ')) return 4;
+                if (previous >= 0 && (!operation(s[previous]) && s[previous] != '(' && s[previous] != ',' && s[previous] != ' ' && s[i - 1] != 'g')) return 4;
             }
             bool dot = false;
             symbols = s[i];
-            while (digit(s[i + 1]) || (s[i + 1] == ' ') || (s[i + 1] == '.')) {
+            while (digit(s[i + 1]) || (s[i + 1] == '.')) {
                 if (digit(s[i + 1])) symbols += s[i + 1];
                 if (s[i + 1] == '.') {
+                    if (!digit(s[i + 2])) return 2;
                     symbols += s[i + 1];
                     if (dot == false) dot = true;
                     else return 2;
@@ -93,12 +95,12 @@ int Function::set_rpn(string s) {
                 previous = i - 1;
                 while (previous > 0 && s[previous] == ' ') previous--;
                 if (i != 0 && s[previous] == '(' && operation(s[next])) return 3;
-                if (previous == 0 && s[i] != '-') return 3;
+                if (previous == 0 && s[previous] == ' ' && s[i] != '-') return 3;
                 if ((s[i] != '-') && operation(s[previous])) return 3;
 
             }
             symbols = s[i];
-            if ((s[i] == '-') && (previous == 0 || operation(s[previous]) || s[previous] == '(' || minus_in_root == true || (s[previous] == '|' && checkabs == true))) symbols = "~";
+            if ((s[i] == '-') && (previous == 0 || operation(s[previous]) || s[previous] == '(' || minus_in_root == true || s[previous] == '|')) symbols = "~";
             while ((!Stek.empty()) && (operationPriority[Stek.top()] >= operationPriority[symbols])) {
                 m_expression.push_back(Stek.top());
                 Stek.pop();
@@ -110,7 +112,7 @@ int Function::set_rpn(string s) {
             if (i > 0) {
                 previous = i - 1;
                 while (previous > 0 && s[previous] == ' ') previous--;
-                if (previous >= 0 && (!operation(s[previous]) && s[previous] != '(' && s[previous] != ',' && s[previous] != ' ')) return 4;
+                if (previous >= 0 && (!operation(s[previous]) && s[previous] != '(' && s[previous] != ',' && s[previous] != ' ' && s[previous] != '|')) return 4;
             }
             if (s[i] == 'x') {
                 m_expression.push_back("x");
@@ -154,6 +156,10 @@ int Function::set_rpn(string s) {
                     else if (s[i + 1] == 'h') {
                         symbols = "sinh()";
                         i++;
+                    }
+                    else if ((s[i + 1] == 'g') && (s[i + 2] == 'n')) {
+                        symbols = "sgn()";
+                        i = i + 2;
                     }
                     else return 2;
                     break;
@@ -264,11 +270,7 @@ int Function::set_rpn(string s) {
                     else return 2;
                     break;
                 case 'e':
-                    if (s[i + 1] == '^') {
-                        symbols = "exp()";
-                        i++;
-                    }
-                    else if ((s[i + 1] == 'x') && (s[i + 2] == 'p')) {
+                    if ((s[i + 1] == 'x') && (s[i + 2] == 'p')) {
                         symbols = "exp()";
                         i = i + 2;
                     }
@@ -315,10 +317,9 @@ int Function::set_rpn(string s) {
             }
         }
         else {
-            int w = 0;
             switch (s[i]) {
             case '|':
-                if (checkabs == 0) {
+                if (i == 0) {
                     while ((!Stek.empty()) && (operationPriority[Stek.top()] >= operationPriority["abs()"])) {
                         m_expression.push_back(Stek.top());
                         Stek.pop();
@@ -328,7 +329,7 @@ int Function::set_rpn(string s) {
                     brackets++;
                     checkabs++;
                 }
-                else {
+                else if (i == len - 1) {
                     while ((!Stek.empty()) && (Stek.top() != "(")) {
                         m_expression.push_back(Stek.top());
                         Stek.pop();
@@ -336,6 +337,38 @@ int Function::set_rpn(string s) {
                     if (Stek.top() == "(") Stek.pop();
                     brackets--;
                     checkabs--;
+                }
+                else {
+                    previous = i - 1;
+                    while (previous > 0 && s[previous] == ' ') previous--;
+                    if (previous == 0 && s[previous] == ' ') symbols = "abs()";
+                    next = i + 1;
+                    while (next < len - 1 && s[next] == ' ') next++;
+
+                    if (operation(s[previous]) || s[previous] == '(' || s[previous] == ',' || s[previous] == '|') {
+                        if (letter(s[next]) || digit(s[next]) || s[next] == '(' || s[next] == '|' || s[next] == '-') {
+                            while ((!Stek.empty()) && (operationPriority[Stek.top()] >= operationPriority["abs()"])) {
+                                m_expression.push_back(Stek.top());
+                                Stek.pop();
+                            }
+                            Stek.push("abs()");
+                            Stek.push("(");
+                            brackets++;
+                            checkabs++;
+                        }
+                    }
+                    else if (letter(s[previous]) || digit(s[previous]) || s[previous] == ')' || s[previous] == '|') {
+                        if (operation(s[next]) || s[next] == ')' || s[next] == ',' || s[next] == '|') {
+                            while ((!Stek.empty()) && (Stek.top() != "(")) {
+                                m_expression.push_back(Stek.top());
+                                Stek.pop();
+                            }
+                            if (Stek.top() == "(") Stek.pop();
+                            brackets--;
+                            checkabs--;
+                        }
+                    }
+                    else return 2;
                 }
                 break;
             case '(':
@@ -363,14 +396,14 @@ int Function::set_rpn(string s) {
                 break;
             case ',':
                 if (countroot > 0) {
-                    w = i - 1;
-                    while (s[w] == ' ') w--;
-                    if (s[w] == '(') return 4;
-                    w = i + 1;
-                    while (s[w] == ' ') w++;
-                    i = w - 1;
-                    if (s[w] == '-') minus_in_root = true;
-                    else if (!digit(s[w]) && !letter(s[w]) && s[w] != '(') return 2;
+                    previous = i - 1;
+                    while (s[previous] == ' ') previous--;
+                    if (s[previous] == '(') return 4;
+                    next = i + 1;
+                    while (s[next] == ' ') next++;
+                    i = next - 1;
+                    if (s[next] == '-') minus_in_root = true;
+                    else if (!digit(s[next]) && !letter(s[next]) && s[next] != '(') return 2;
                     while ((!Stek.empty()) && (Stek.top() != "(")) {
                         m_expression.push_back(Stek.top());
                         Stek.pop();
@@ -393,6 +426,7 @@ int Function::set_rpn(string s) {
         }
     }
     if (brackets != 0) return 1;
+    if (checkabs != 0) return 3;
     if ((dig == 0) || (countroot != 0)) return 4;
     return 0;
 }
@@ -409,6 +443,7 @@ double Function::get_y(double x) {
     stack <double> Stek1;
     double first = 0;
     double second = 0;
+    double z;
 
     for (string s : m_expression) {
         if (digit(s[0])) {
@@ -417,8 +452,7 @@ double Function::get_y(double x) {
                 if (s[j] == '.') l = s.length() - j - 1;
                 else number = number * 10 + ((double)s[j] - 48);
             }
-            number = number / pow(10, l);
-            Stek1.push(number);
+            z = number / pow(10, l);
         }
         else if (operation(s[0])) {
             second = Stek1.top();
@@ -427,29 +461,27 @@ double Function::get_y(double x) {
             Stek1.pop();
             switch (s[0]) {
             case '+':
-                Stek1.push(first + second);
+                z = first + second;
                 break;
             case '-':
-                Stek1.push(first - second);
+                z = first - second;
                 break;
             case '*':
-                Stek1.push(first * second);
+                z = first * second;
                 break;
             case '/':
-                //if (second == 0) return MAX;
-                Stek1.push(first / second);
+                if (second == 0) return nan("1");
+                z = first / second;
                 break;
             case '^':
-                double z = pow(first, second);
-                Stek1.push(z);
+                z = pow(first, second);
                 break;
             }
         }
         else if (s[0] == '~') {
             first = Stek1.top();
             Stek1.pop();
-            double z = 0 - first;
-            Stek1.push(z);
+            z = 0 - first;
         }
         else if (letter(s[0])) {
             if (s == "loga()") {
@@ -457,65 +489,63 @@ double Function::get_y(double x) {
                 Stek1.pop();
                 first = Stek1.top();
                 Stek1.pop();
-                //if (first == 1 || first < 0) return MAX;
-                double z = (log10(second)) / (log10(first));
-                Stek1.push(z);
+                if (first == 1 || first < 0) return nan("1");
+                z = (log10(second)) / (log10(first));
             }
             else if (s == "root()") {
                 second = Stek1.top();
                 Stek1.pop();
                 first = Stek1.top();
                 Stek1.pop();
-                double z = pow(abs(first), 1.0 / second);
+                z = pow(abs(first), 1.0 / second);
                 if (first < 0 && (floor(second) == second) && ((int)second % 2 != 0)) z = 0 - z;
-                //if (first < 0 && (floor(second) == second) && ((int)second % 2 == 0)) return MAX;
-                Stek1.push(z);
+                if (first < 0 && (floor(second) == second) && ((int)second % 2 == 0)) return nan("1");
             }
-            else if (s == "x") Stek1.push(x);
-            else if (s == "pi") Stek1.push(PI);
-            else if (s == "e") Stek1.push(exp(1));
+            else if (s == "x") z = x;
+            else if (s == "pi") z = PI;
+            else if (s == "e") z = exp(1);
             else {
                 first = Stek1.top();
                 Stek1.pop();
-                if (s == "sin()") Stek1.push(sin(first));
-                else if (s == "sinh()") Stek1.push(sinh(first));
-                else if (s == "cos()") Stek1.push(cos(first));
-                else if (s == "cosh()") Stek1.push(cosh(first));
-                else if (s == "tan()") Stek1.push(tan(first));
-                else if (s == "tanh()") Stek1.push(tanh(first));
-                else if (s == "cotan()") Stek1.push(1 / (tan(first)));
-                else if (s == "cotanh()") {
-                    double z = (exp(first) + exp(0.0 - first)) / (exp(first) - exp(0.0 - first));
-                    Stek1.push(z);
+                if (s == "sin()") z = sin(first);
+                else if (s == "sinh()") z = sinh(first);
+                else if (s == "cos()") z = cos(first);
+                else if (s == "cosh()") z = cosh(first);
+                else if (s == "tan()") z = tan(first);
+                else if (s == "tanh()") z = tanh(first);
+                else if (s == "cotan()") z = 1.0 / (tan(first));
+                else if (s == "cotanh()") z = (exp(first) + exp(0.0 - first)) / (exp(first) - exp(0.0 - first));
+                else if (s == "asin()") z = asin(first);
+                else if (s == "asinh()") z = asinh(first);
+                else if (s == "acos()") z = acos(first);
+                else if (s == "acosh()") z = acosh(first);
+                else if (s == "atan()") z = atan(first);
+                else if (s == "atanh()") z = atanh(first);
+                else if (s == "acotan()") z = PI / 2.0 - atan(first);
+                else if (s == "acotanh()") z = 1.0 / 2 * log((first + 1) / (first - 1));
+                else if (s == "log()") z = log(first);
+                else if (s == "log10()") z = log10(first);
+                else if (s == "exp()") z = exp(first);
+                else if (s == "abs()") z = abs(first);
+                else if (s == "grad()") z = first * (PI / 180);
+                else if (s == "sgn()") {
+                    if (first > 0) z = 1.0;
+                    else if (first == 0) z = 0.0;
+                    else z = -1.0;
                 }
-                else if (s == "asin()") Stek1.push(asin(first));
-                else if (s == "asinh()") Stek1.push(asinh(first));
-                else if (s == "acos()") Stek1.push(acos(first));
-                else if (s == "acosh()") Stek1.push(acosh(first));
-                else if (s == "atan()") Stek1.push(atan(first));
-                else if (s == "atanh()") Stek1.push(atanh(first));
-                else if (s == "acotan()") Stek1.push(PI / 2.0 - atan(first));
-                else if (s == "acotanh()") {
-                    double z = 1.0 / 2 * log((first + 1) / (first - 1));
-                    Stek1.push(z);
-                }
-                else if (s == "log()") Stek1.push(log(first));
-                else if (s == "log10()") Stek1.push(log10(first));
-                else if (s == "exp()") Stek1.push(exp(first));
-                else if (s == "abs()") Stek1.push(abs(first));
-                else if (s == "grad()") Stek1.push(first * (PI / 180));
                 else {
                     cout << "Error when finding Y";
                     exit(0);
                 }
             }
         }
-        else {
-            cout << "Error when finding Y";
-            exit(0);
-        }
+        else z = nan("1");
+
+        if (isnan(z) || isinf(z)) return nan("1");
+        else Stek1.push(z);
     }
     first = Stek1.top();
     Stek1.pop();
-    return first;
+    if (isnan(first) || isinf(first)) return nan("1");
+    else return first;
 }
