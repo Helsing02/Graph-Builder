@@ -44,59 +44,59 @@ void MainWindow::add_dynamic_f()
     ui->FuncLayout->addWidget(df);
 }
 
-void MainWindow::build_graph(){
-    FuncWindow* func_window=new FuncWindow;
-    bool flag=true;
-    for (DynamicField* df: fields){
-        if (df->visibility()){
-            int i=func_window->add_func(df->text().toStdString());
-            std::cout<<i;
-            if (i!=0){
-                // ошибка ввода
-                error* window_err=new error;
-                window_err->erro(i);
-                window_err->setModal(true);
-                window_err->show();
-                flag=false;
-            }
-        }
-    }
-    if(flag){
-        int x_min=((ui->xMin)->text()).toInt(), x_max=((ui->xMax)->text()).toInt(), y_min, y_max;
+//void MainWindow::build_graph(){
+//    FuncWindow* func_window=new FuncWindow;
+//    bool flag=true;
+//    for (DynamicField* df: fields){
+//        if (df->visibility()){
+//            int i=func_window->add_func(df->text().toStdString());
+//            std::cout<<i;
+//            if (i!=0){
+//                // ошибка ввода
+//                error* window_err=new error;
+//                window_err->erro(i);
+//                window_err->setModal(true);
+//                window_err->show();
+//                flag=false;
+//            }
+//        }
+//    }
+//    if(flag){
+//        int x_min=((ui->xMin)->text()).toInt(), x_max=((ui->xMax)->text()).toInt(), y_min, y_max;
 
-        func_window->add_graphs(x_min, x_max);
-        func_window->change_size(x_min, x_max, x_min, x_max);
+//        func_window->add_graphs(x_min, x_max);
+//        func_window->change_size(x_min, x_max, x_min, x_max);
 
-        func_window->show();
-    }
-    flag=true;
-    /*
-    if (ui->autoRange->isChecked()){
-        y_min=xin;
-        yMax=xMax;
-    } else {
-        yMin=((ui->yMin)->text()).toInt();
-        yMax=((ui->xMax)->text()).toInt();
-    }
-    if (ui->ch_Pi->isChecked()){
-        xMin*=3.14;
-        xMax*=3.14;
-    }
-    */
+//        func_window->show();
+//    }
+//    flag=true;
+//    /*
+//    if (ui->autoRange->isChecked()){
+//        y_min=xin;
+//        yMax=xMax;
+//    } else {
+//        yMin=((ui->yMin)->text()).toInt();
+//        yMax=((ui->xMax)->text()).toInt();
+//    }
+//    if (ui->ch_Pi->isChecked()){
+//        xMin*=3.14;
+//        xMax*=3.14;
+//    }
+//    */
 
-}
+//}
 
-void MainWindow::disable_y(int i){
-    ui->yMin->setEnabled(!i);
-    ui->yMax->setEnabled(!i);
-    if (i){
-        ui->yMin->setText("");
-        ui->yMax->setText("");
-    } else {
-        ui->yMin->setText(ui->xMin->text());
-        ui->yMax->setText(ui->xMax->text());
-    }
-}
+//void MainWindow::disable_y(int i){
+//    ui->yMin->setEnabled(!i);
+//    ui->yMax->setEnabled(!i);
+//    if (i){
+//        ui->yMin->setText("");
+//        ui->yMax->setText("");
+//    } else {
+//        ui->yMin->setText(ui->xMin->text());
+//        ui->yMax->setText(ui->xMax->text());
+//    }
+//}
 
 void MainWindow::on_pushButton_clicked()
 {

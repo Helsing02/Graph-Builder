@@ -20,9 +20,8 @@ public:
 private slots:
     void add_dynamic_f();
     void delete_dynamic_f(DynamicField* df=nullptr);
-    void build_graph();
+//    void build_graph();
     void disable_y(int);
-
     void on_pushButton_clicked();
 
 private:

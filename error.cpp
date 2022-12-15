@@ -24,3 +24,5 @@ void error::erro(int i){
     else if(i==4)
         ui->text->setText("Строка не заполнена ");
 }
+
+
