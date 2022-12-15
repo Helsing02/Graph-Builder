@@ -17,6 +17,9 @@ DynamicField::DynamicField(QWidget* parent):
     m_push_button = new QPushButton(this);
     m_push_button->setText("Удалить");
 
+    m_push_button_2 = new QPushButton(this);
+    m_push_button_2->setText("Цвет");
+
     m_layout=new QVBoxLayout(this);
     m_upper=new QHBoxLayout(this);
     m_lower=new QHBoxLayout(this);
@@ -26,12 +29,14 @@ DynamicField::DynamicField(QWidget* parent):
     m_lower->addStretch();
     m_lower->addWidget(m_check_box);
     m_lower->addWidget(m_push_button);
+    m_lower->addWidget(m_push_button_2);
 
 
     m_upper->addWidget(m_fx);
     m_upper->addWidget(m_input_line);
 
     QAbstractButton::connect(m_push_button, SIGNAL(clicked()), this, SLOT(b_clicked()));
+    QAbstractButton::connect(m_push_button_2, SIGNAL(clicked()), this, SLOT(c_2_clicked()));
 
 }
 

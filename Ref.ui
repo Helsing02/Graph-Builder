@@ -10,13 +10,27 @@
     <height>600</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <bold>false</bold>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
      <widget class="QScrollArea" name="scrollArea">
+      <property name="font">
+       <font>
+        <family>Segoe UI</family>
+        <bold>false</bold>
+       </font>
+      </property>
       <property name="widgetResizable">
        <bool>true</bool>
       </property>
@@ -25,8 +39,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>780</width>
-         <height>580</height>
+         <width>759</width>
+         <height>701</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_2">
@@ -41,7 +55,7 @@ li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Times New Roman','serif'; font-size:12pt; vertical-align:bottom;&quot;&gt;Вещественные числа пишутся через точку&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Times New Roman','serif'; font-size:12pt; font-weight:700; vertical-align:bottom;&quot;&gt;Список математических функций:&lt;/span&gt;&lt;span style=&quot; font-family:'Times New Roman','serif'; font-size:12pt; vertical-align:bottom;&quot;&gt;&lt;br /&gt;ln(x), log(x) — натуральный логарифм&lt;br /&gt;log(a)(x)-логарифм x по основанию a&lt;br /&gt;sin(x) — синус&lt;br /&gt;cos(x) — косинус&lt;br /&gt;tg(x), tan(x)— тангенс&lt;br /&gt;cotan(x), ctg(x)— котангенс&lt;br /&gt;asin(x), arcsin(x) — арксинус&lt;br /&gt;acos(x), arccos(x) — арккосинус&lt;br /&gt;atg(x), atan(x), arctg(x), arctan(x) — арктангенс&lt;br /&gt;actg(x), acotan(x), arcctg(x), arcotan(x) — арккотангенс&lt;br /&gt;sh(x), sinh(x) — гиперболический синус&lt;br /&gt;ch(x), cosh(x) — гиперболический косинус&lt;br /&gt;tanh(x), tgh(x) — гиперболический тангенс&lt;br /&gt;cotanh(x), ctgh(x) — гиперболический котангенс&lt;br /&gt;asinh(x), arcsinh(x) — обратный гиперболический синус&lt;br /&gt;acosh(x), arccosh(x) — обратный гиперболический косинус&lt;br /&gt;atanh(x), arctanh(x), atgh(x), arctgh(x) — обратный гиперболический тангенс&lt;br /&gt;acotanh(x), arccotanh(x), actgh(x), arcctgh(x) — обратный гиперболический котангенс&lt;br /&gt;exp(x), e^ — экспонента в степени x&lt;br /&gt;abs(x)— модуль x&lt;br /&gt;grad(x)— перевод из градусов в радианы x&lt;br /&gt;x^a— x в степени a&lt;br /&gt;root(x, a)— корень a-ой степени из x (если x&amp;lt;0, то a должно быть целым)&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'Times New Roman','serif'; font-size:12pt; font-weight:700; vertical-align:bottom;&quot;&gt;Константы: Список операций:&lt;/span&gt;&lt;span style=&quot; font-family:'Times New Roman','serif'; font-size:12pt; vertical-align:bottom;&quot;&gt;&lt;br /&gt;pi число пи * умножение + сложение &lt;br /&gt;e число e / деление - разность
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Times New Roman','serif'; font-size:12pt; font-weight:700; vertical-align:bottom;&quot;&gt;Список математических функций:&lt;/span&gt;&lt;span style=&quot; font-family:'Times New Roman','serif'; font-size:12pt; vertical-align:bottom;&quot;&gt;&lt;br /&gt;ln(x), log(x) — натуральный логарифм&lt;br /&gt;log(a)(x)-логарифм x по основанию a&lt;br /&gt;sin(x) — синус&lt;br /&gt;cos(x) — косинус&lt;br /&gt;tg(x), tan(x)— тангенс&lt;br /&gt;cotan(x), ctg(x)— котангенс&lt;br /&gt;asin(x), arcsin(x) — арксинус&lt;br /&gt;acos(x), arccos(x) — арккосинус&lt;br /&gt;atg(x), atan(x), arctg(x), arctan(x) — арктангенс&lt;br /&gt;actg(x), acotan(x), arcctg(x), arcotan(x) — арккотангенс&lt;br /&gt;sh(x), sinh(x) — гиперболический синус&lt;br /&gt;ch(x), cosh(x) — гиперболический косинус&lt;br /&gt;tanh(x), tgh(x) — гиперболический тангенс&lt;br /&gt;cotanh(x), ctgh(x) — гиперболический котангенс&lt;br /&gt;asinh(x), arcsinh(x) — обратный гиперболический синус&lt;br /&gt;acosh(x), arccosh(x) — обратный гиперболический косинус&lt;br /&gt;atanh(x), arctanh(x), atgh(x), arctgh(x) — обратный гиперболический тангенс&lt;br /&gt;acotanh(x), arccotanh(x), actgh(x), arcctgh(x) — обратный гиперболический котангенс&lt;br /&gt;exp(x), e^ — экспонента в степени x&lt;br /&gt;abs(x)— модуль x&lt;br /&gt;grad(x)— перевод из градусов в радианы x&lt;br /&gt;sgn(x)—кусочно-постоянная функция действительного аргумеента x&lt;br /&gt;x^a— x в степени a&lt;br /&gt;root(x, a)— корень a-ой степени из x (если x&amp;lt;0, то a должно быть целым)&lt;br /&gt;&lt;/span&gt;&lt;span style=&quot; font-family:'Times New Roman','serif'; font-size:12pt; font-weight:700; vertical-align:bottom;&quot;&gt;Константы: Список операций:&lt;/span&gt;&lt;span style=&quot; font-family:'Times New Roman','serif'; font-size:12pt; vertical-align:bottom;&quot;&gt;&lt;br /&gt;pi число пи * умножение + сложение &lt;br /&gt;e число e / деление - разность
 </string>
           </property>
          </widget>

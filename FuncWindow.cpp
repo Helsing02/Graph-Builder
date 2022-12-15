@@ -37,12 +37,12 @@ void FuncWindow::add_graphs(double x_min, double x_max)
     QVector<QVector<QVector<double>>> graphs;
 
     graphs = m_func_collection.get_points(x_min, x_max);
-    for (QVector<QVector<double>> graph: graphs){
-        std::cout<<graph[0].length()<<" "<<graph[1].length()<<std::endl;
-        for(double d: graph[1]){
-            std::cout<<d<<std::endl;
-        }
-    }
+//    for (QVector<QVector<double>> graph: graphs){
+//        std::cout<<graph[0].length()<<" "<<graph[1].length()<<std::endl;
+//        for(double d: graph[1]){
+////            std::cout<<d<<std::endl;
+//        }
+//    }
     std::cout<<"All!";
     int index = 0;
     for(QVector<QVector<double>> m_graph: graphs)
@@ -89,4 +89,15 @@ void FuncWindow::rebuild(QCPRange new_range, QCPRange old_range)
     }
 
 
+}
+void FuncWindow::on_pushButton_clicked()
+{
+    QString format = "png";
+    QString initialPath = QDir::currentPath() + tr("/untitled.") + format;
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save As"),
+                                   initialPath,
+                                   tr("%1 Files (*.%2);;All Files (*)")
+                                   .arg(format.toUpper())
+                                   .arg(format));
+    w_graphic->savePng(fileName);
 }

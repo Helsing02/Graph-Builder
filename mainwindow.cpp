@@ -46,22 +46,30 @@ void MainWindow::add_dynamic_f()
 
 void MainWindow::build_graph(){
     FuncWindow* func_window=new FuncWindow;
+    bool flag=true;
     for (DynamicField* df: fields){
         if (df->visibility()){
-            if (func_window->add_func(df->text().toStdString())){
+            int i=func_window->add_func(df->text().toStdString());
+            std::cout<<i;
+            if (i!=0){
                 // ошибка ввода
+                error* window_err=new error;
+                window_err->erro(i);
+                window_err->setModal(true);
+                window_err->show();
+                flag=false;
             }
-            std::cout<<(df->text()).toStdString()<<std::endl;
         }
     }
+    if(flag){
+        int x_min=((ui->xMin)->text()).toInt(), x_max=((ui->xMax)->text()).toInt(), y_min, y_max;
 
-    std::cout<<std::endl;
-    int x_min=((ui->xMin)->text()).toInt(), x_max=((ui->xMax)->text()).toInt(), y_min, y_max;
+        func_window->add_graphs(x_min, x_max);
+        func_window->change_size(x_min, x_max, x_min, x_max);
 
-    func_window->add_graphs(x_min, x_max);
-    func_window->change_size(x_min, x_max, x_min, x_max);
-
-    func_window->show();
+        func_window->show();
+    }
+    flag=true;
     /*
     if (ui->autoRange->isChecked()){
         y_min=xin;
@@ -94,7 +102,6 @@ void MainWindow::on_pushButton_clicked()
 {
     Ref* window=new Ref;
     window->show();
-
 }
 
 

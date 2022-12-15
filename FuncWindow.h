@@ -24,10 +24,10 @@ public:
 private slots:
     void rebuild(QCPRange,QCPRange);
 
-/*
+
 private slots:
     void on_pushButton_clicked();
-*/
+
 private:
     Ui::FuncWindow *ui;
     QCustomPlot *w_graphic;

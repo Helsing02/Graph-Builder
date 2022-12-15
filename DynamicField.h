@@ -8,6 +8,11 @@
 #include <QSpacerItem>
 #include <string>
 
+#include <QColorDialog>
+#include <QColor>
+#include <QPalette>
+#include <QDebug>
+
 class DynamicField: public QWidget
 {
     Q_OBJECT
@@ -16,6 +21,7 @@ private:
     QLineEdit* m_input_line;
     QCheckBox* m_check_box;
     QPushButton* m_push_button;
+    QPushButton* m_push_button_2;
     QVBoxLayout* m_layout;
     QHBoxLayout* m_upper;
     QHBoxLayout* m_lower;
@@ -30,7 +36,5 @@ private slots:
     void c_2_clicked();
 signals:
     void delete_field(DynamicField*);
-
-
-
+    void colorGraphic(DynamicField*);
 };
