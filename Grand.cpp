@@ -15,35 +15,31 @@ Grand::~Grand(){
 
 void Grand::build_graph(){
     FuncWindow* func_window=new FuncWindow;
-    bool flag=true;
-    for(int j=0; j<w_main->fields.size(); j++){
+    QVector <QString> expressions=w_main->get_exp();
+    QVector <QRgb> colors=w_main->get_cols();
+    for(int j=0; j<expressions.size(); j++){
         w_func.push_back(func_window);
-        if(int i=add_func(w_main->get_exp(), w_main->get_colls)!=0){
+        if(int i=func_window->add_func(expressions[j], colors[j])!=0){
             // ошибка ввода
             error* window_err=new error;
             window_err->erro(i);
             window_err->setModal(true);
             window_err->show();
-            flag=false;
+            return;
         }
     }
-    if(flag){//в каких пределах находится
-        Qvector ran=w_main->get_range();
-        if(w_main->is_range_in_pi())
-            func_window->set_range_pi(ran[0], ran[1]);
-        else if(w_main->auto_range_is_checked()){
-            change_range_x(ran[0], ran[1]);
-            func_window->find_range_y();
-        }
-        else{
-            func_window->change_range_x(ran[0], ran[1]);
-            func_window->change_range_y(ran[2], ran[3]);
-        }
-        func_window->show();
+    QVector <double> ran=w_main->get_range();
+    if(w_main->is_range_in_pi())
+        func_window->set_range_pi(ran[0], ran[1]);
+    else if(w_main->auto_range_is_checked()){
+        func_window->change_range_x(ran[0], ran[1]);
+        func_window->find_range_y();
     }
-
-    flag=true;
-
+    else{
+        func_window->change_range_x(ran[0], ran[1]);
+        func_window->change_range_y(ran[2], ran[3]);
+    }
+    func_window->show();
 }
 
 //void Grand::build_graph(){
