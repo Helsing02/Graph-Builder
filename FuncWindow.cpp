@@ -169,3 +169,14 @@ void FuncWindow::rebuild(QCPRange new_range, QCPRange old_range)
         old_max = new_range.upper;
     }
 }
+void FuncWindow::on_pushButton_clicked()
+{
+    QString format = "png";
+    QString initialPath = QDir::currentPath() + tr("/untitled.") + format;
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save As"),
+                                   initialPath,
+                                   tr("%1 Files (*.%2);;All Files (*)")
+                                   .arg(format.toUpper())
+                                   .arg(format));
+    w_graphic->savePng(fileName);
+}
