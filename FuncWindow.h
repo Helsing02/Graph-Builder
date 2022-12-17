@@ -17,17 +17,28 @@ public:
 
     explicit FuncWindow(QWidget *parent = nullptr);
     ~FuncWindow();
-    int add_func(std::string new_func);
-    void add_graphs(int x_min, int x_max);
+    int add_func(QString new_func, QRgb col);
+    void add_graphs(double x_min, double x_max);
+    void set_range_pi(double, double);
+    void find_range_y();
+    void change_range_x(double, double);
+    void change_range_y(double, double);
     void change_size(int, int, int, int);
-private:
 
+private slots:
+    void save_pic();
+    void rebuild(QCPRange,QCPRange);
+
+/*
+private slots:
+    void on_pushButton_clicked();
+*/
+private:
     Ui::FuncWindow *ui;
     QCustomPlot *w_graphic;
     FuncCollection m_func_collection;
-    int cur_min_x;
-    int cur_max_x;
-    void rebuild();
+    double old_min;
+    double old_max;
 };
 
 #endif // FUNCWINDOW_H

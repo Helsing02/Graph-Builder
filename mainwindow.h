@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include "DynamicField.h"
-#include "FuncCollection.h"
+#include "FuncWindow.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -18,15 +18,16 @@ public:
     ~MainWindow();
 
 private slots:
-    void add_Dfield();
-    void delete_Dfield(DynamicField* df=0);
+    void add_dynamic_f();
+    void delete_dynamic_f(DynamicField* df=nullptr);
     void build_graph();
-    void disableY(int);
+    void disable_y(int);
+
+    void on_pushButton_clicked();
 
 private:
     Ui::MainWindow *ui;
     QVector <DynamicField*> fields;
-    FuncCollection * collection;
 
 };
 #endif // MAINWINDOW_H

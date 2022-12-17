@@ -4,8 +4,8 @@
 #include <cmath>
 #include <map>
 #include <stack>
-
-#define PI 3.14159265   
+#include <algorithm>
+#define PI 3.14159265  
 
 class Function
 {
@@ -14,8 +14,9 @@ private:
     bool letter(char);
     bool digit(char);
     bool operation(char);
-    int create_RPN(std::string);
+    int set_rpn(std::string);
+    
 public:
-    double get_y(double);
     int set_exp(std::string);
+    double get_y(double);
 };
