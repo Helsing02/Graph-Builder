@@ -16,17 +16,20 @@ MainWindow::MainWindow(QWidget *parent)
     ui->yMax->setEnabled(false);
 
     add_dynamic_f();
-    connect(ui->autoRange, SIGNAL(stateChanged(int)), this, SLOT(disable_y(int)));
+    connect(ui->autoRange, SIGNAL(stateChanged(int)), this, SLOT(set_enabled_auto_range(int)));
     connect(ui->addBtn, SIGNAL(clicked()), this, SLOT(add_dynamic_f()));
     connect(ui->buildBtn, SIGNAL(clicked()), this, SLOT(build_graph()));
+    connect(ui->refBtn, SIGNAL(clicked()), this, SLOT(show_ref()));
 }
 
 MainWindow::~MainWindow()
 {
+    emit close();
     delete ui;
 }
 
-QVector <QString> MainWindow::get_exp(){
+QVector <QString> MainWindow::get_exp()
+{
     QVector<QString> to_ret;
     for (DynamicField* df : fields){
         if(df->disp_is_checked()){
@@ -36,8 +39,9 @@ QVector <QString> MainWindow::get_exp(){
     return to_ret;
 }
 
-QVector <QRgb> MainWindow::get_cols(){
-    QVector<QRgb> to_ret;
+QVector <QColor> MainWindow::get_cols()
+{
+    QVector<QColor> to_ret;
     for (DynamicField* df : fields){
         if(df->disp_is_checked()){
             to_ret.push_back(df->get_color());
@@ -46,7 +50,8 @@ QVector <QRgb> MainWindow::get_cols(){
     return to_ret;
 }
 
-QVector <double> MainWindow::get_range(){
+QVector <double> MainWindow::get_range()
+{
     QVector <double> to_ret;
     to_ret.push_back(((ui->xMin)->text()).toDouble());
     to_ret.push_back(((ui->xMax)->text()).toDouble());
@@ -60,11 +65,13 @@ QVector <double> MainWindow::get_range(){
     return to_ret;
 }
 
-bool MainWindow::auto_range_is_checked(){
+bool MainWindow::auto_range_is_checked()
+{
     return ui->autoRange->isChecked();
 }
 
-bool MainWindow::is_range_in_pi(){
+bool MainWindow::is_range_in_pi()
+{
     return ui->ch_Pi->isChecked();
 }
 
@@ -76,16 +83,17 @@ void MainWindow::add_dynamic_f()
     ui->FuncLayout->addWidget(df);
 }
 
-void MainWindow::delete_dynamic_f(DynamicField* df){
+void MainWindow::delete_dynamic_f(DynamicField* df)
+{
     fields.remove(fields.indexOf(df));
-    //ui->FuncLayout->removeWidget(df);
     delete df;
 }
 
-void MainWindow::set_enabled_auto_range(bool f){
-    ui->yMin->setEnabled(f);
-    ui->yMax->setEnabled(f);
-    if (f){
+void MainWindow::set_enabled_auto_range(int f)
+{
+    ui->yMin->setEnabled(!f);
+    ui->yMax->setEnabled(!f);
+    if (!f){
         ui->yMin->setText(ui->xMin->text());
         ui->yMax->setText(ui->xMax->text());
     } else {
@@ -100,47 +108,7 @@ void MainWindow::show_ref()
     window->show();
 }
 
-
-//void MainWindow::build_graph(){
-//    FuncWindow* func_window=new FuncWindow;
-//    bool flag=true;
-//    for (DynamicField* df: fields){
-//        if (df->visibility()){
-//            int i=func_window->add_func(df->text().toStdString());
-//            std::cout<<i;
-//            if (i!=0){
-//                // ошибка ввода
-//                error* window_err=new error;
-//                window_err->erro(i);
-//                window_err->setModal(true);
-//                window_err->show();
-//                flag=false;
-//            }
-//        }
-//    }
-//    if(flag){
-//        int x_min=((ui->xMin)->text()).toInt(), x_max=((ui->xMax)->text()).toInt(), y_min, y_max;
-
-//        func_window->add_graphs(x_min, x_max);
-//        func_window->change_size(x_min, x_max, x_min, x_max);
-
-//        func_window->show();
-//    }
-//    flag=true;
-//    /*
-//    if (ui->autoRange->isChecked()){
-//        y_min=xin;
-//        yMax=xMax;
-//    } else {
-//        yMin=((ui->yMin)->text()).toInt();
-//        yMax=((ui->xMax)->text()).toInt();
-//    }
-//    if (ui->ch_Pi->isChecked()){
-//        xMin*=3.14;
-//        xMax*=3.14;
-//    }
-//    */
-
-//}
-
-
+void MainWindow::build_graph()
+{
+    emit build_signal();
+}

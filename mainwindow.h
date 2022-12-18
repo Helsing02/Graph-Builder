@@ -18,7 +18,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     QVector <QString> get_exp();
-    QVector <QRgb> get_cols();
+    QVector <QColor> get_cols();
     QVector <double> get_range();
     bool auto_range_is_checked();
     bool is_range_in_pi ();
@@ -26,10 +26,13 @@ public:
 private slots:
     void add_dynamic_f();
     void delete_dynamic_f(DynamicField* df=nullptr);
-    void set_enabled_auto_range(bool);
+    void set_enabled_auto_range(int);
     void show_ref();
+    void build_graph();
 
-    void on_pushButton_clicked();
+signals:
+    void build_signal();
+    void close();
 
 private:
     Ui::MainWindow *ui;

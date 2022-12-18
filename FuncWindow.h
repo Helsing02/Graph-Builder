@@ -17,7 +17,7 @@ public:
 
     explicit FuncWindow(QWidget *parent = nullptr);
     ~FuncWindow();
-    int add_func(QString new_func, QRgb col);
+    int add_func(QString new_func, QColor col);
     void add_graphs(double x_min, double x_max);
     void set_range_pi(double, double);
     void find_range_y();
@@ -27,12 +27,8 @@ public:
 
 private slots:
     void save_pic();
-    void rebuild(QCPRange,QCPRange);
+    void rebuild(QCPRange);
 
-/*
-private slots:
-    void on_pushButton_clicked();
-*/
 private:
     Ui::FuncWindow *ui;
     QCustomPlot *w_graphic;

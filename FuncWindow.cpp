@@ -18,7 +18,12 @@ FuncWindow::FuncWindow(QWidget *parent)
     w_graphic->setInteraction(QCP::iRangeDrag, true);
     w_graphic->setInteraction(QCP::iRangeZoom, true);
 
-    connect(w_graphic->xAxis, SIGNAL(rangeChanged(QCPRange, QCPRange)), this, SLOT(rebuild(QCPRange, QCPRange)));
+    w_graphic->legend = new QCPLegend;
+
+    w_graphic->axisRect()->insetLayout()->addElement(w_graphic->legend, Qt::AlignTop|Qt::AlignRight);
+    w_graphic->legend->setLayer("legend");
+
+    connect(w_graphic->xAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(rebuild(QCPRange)));
 
     old_min = 0;
     old_max = 5;
@@ -29,14 +34,17 @@ FuncWindow::~FuncWindow()
     delete ui;
 }
 
-int FuncWindow::add_func(QString new_func, QRgb col)
+int FuncWindow::add_func(QString new_func, QColor col)
 {
     w_graphic->addGraph(w_graphic->xAxis, w_graphic->yAxis);
 
     int m_count = w_graphic->graphCount();
     w_graphic->graph(m_count - 1)->setName(new_func);
-    w_graphic->graph(m_count - 1)->pen().setColor(col);
-    //w_graphic->graph(m_count - 1)->setLineStyle(QCPGraph::LineStyle (QCPGraph::lsStepLeft));
+    QPen pen;
+    pen.setColor(col);
+    pen.setWidth(1);
+    w_graphic->graph(m_count - 1)->setPen(pen);
+    w_graphic->graph(m_count-1)->addToLegend(w_graphic->legend);
 
     return m_func_collection.add_func(new_func.toStdString());
 }
@@ -46,13 +54,6 @@ void FuncWindow::add_graphs(double x_min, double x_max)
     QVector<QVector<QVector<double>>> graphs;
 
     graphs = m_func_collection.get_points(x_min, x_max);
-    for (QVector<QVector<double>> graph: graphs){
-        std::cout<<graph[0].length()<<" "<<graph[1].length()<<std::endl;
-        for(double d: graph[1]){
-            std::cout<<d<<std::endl;
-        }
-    }
-    std::cout<<"All!";
     int index = 0;
     for(QVector<QVector<double>> m_graph: graphs)
     {
@@ -106,12 +107,12 @@ void FuncWindow::change_range_y(double y_min, double y_max)
     w_graphic->yAxis->setRange(y_min, y_max);
 }
 
-void FuncWindow::rebuild(QCPRange new_range, QCPRange old_range)
+void FuncWindow::rebuild(QCPRange new_range)
 {
+    std::cout<<old_min<<" "<<old_max<<" "<<new_range.lower<<" "<<new_range.upper<<std::endl;
     if(abs(new_range.lower - old_min) > (new_range.upper - new_range.lower)/100 &&
             abs(new_range.upper - old_max) > (new_range.upper - new_range.lower)/100)
     {
-        std::cout<<old_min<<" "<<old_max<<" "<<new_range.lower<<" "<<new_range.upper<<std::endl;
         if((new_range.upper-new_range.lower)!=(old_max-old_min)){
             std::cout<<"change size\n";
             if(new_range.lower < old_min)
@@ -169,7 +170,8 @@ void FuncWindow::rebuild(QCPRange new_range, QCPRange old_range)
         old_max = new_range.upper;
     }
 }
-void FuncWindow::on_pushButton_clicked()
+
+void FuncWindow::save_pic()
 {
     QString format = "png";
     QString initialPath = QDir::currentPath() + tr("/untitled.") + format;

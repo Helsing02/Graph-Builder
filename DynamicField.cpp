@@ -34,37 +34,35 @@ DynamicField::DynamicField(QWidget* parent):
     m_upper->addWidget(m_fx);
     m_upper->addWidget(m_input_line);
 
-    m_color=new QColor;
-    m_color->setRgb(102, 0, 204);
+    m_color=0x880033ff;
 
     QAbstractButton::connect(m_btn_delete, SIGNAL(clicked()), this, SLOT(del_btn_clicked()));
     QAbstractButton::connect(m_btn_color, SIGNAL(clicked()), this, SLOT(col_btn_clicked()));
 
 }
 
-QString DynamicField::get_exp(){
+QString DynamicField::get_exp()
+{
     return m_input_line->text();
 }
 
-QRgb DynamicField::get_color(){
-    return m_color->rgb();
+QColor DynamicField::get_color()
+{
+    return m_color;
 }
 
-bool DynamicField::disp_is_checked(){
+bool DynamicField::disp_is_checked()
+{
     return m_check_box->isChecked();
 }
 //для цвета
-void DynamicField::c_2_clicked(){
-    QColor ColorValue=QColorDialog::getColor(Qt::white);
-    qDebug()<<ColorValue;
+void DynamicField::col_btn_clicked()
+{
+    m_color=QColorDialog::getColor(Qt::white);
+    m_btn_color->setStyleSheet( QString("background-color: %1").arg(m_color.name()));
 }
 
-void DynamicField::del_btn_clicked(){
+void DynamicField::del_btn_clicked()
+{
     emit delete_field(this);
-}
-
-//для цвета
-void DynamicField::col_btn_clicked(){
-    QColor ColorValue=QColorDialog::getColor(Qt::white);
-    qDebug()<<ColorValue;
 }

@@ -25,13 +25,13 @@ private:
     QVBoxLayout* m_layout;
     QHBoxLayout* m_upper;
     QHBoxLayout* m_lower;
-    QColor* m_color;
+    QColor m_color;
 
 public:
     DynamicField(QWidget* parent=nullptr);
     QString text();
     QString get_exp();
-    QRgb get_color();
+    QColor get_color();
     bool disp_is_checked();
 
 private slots:
@@ -39,5 +39,4 @@ private slots:
     void col_btn_clicked();
 signals:
     void delete_field(DynamicField*);
-    void colorGraphic(DynamicField*);
 };
