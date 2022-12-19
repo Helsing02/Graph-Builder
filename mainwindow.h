@@ -23,6 +23,9 @@ public:
     bool auto_range_is_checked();
     bool is_range_in_pi ();
 
+private:
+    void close_event(QCloseEvent* event);
+
 private slots:
     void add_dynamic_f();
     void delete_dynamic_f(DynamicField* df=nullptr);
@@ -32,7 +35,7 @@ private slots:
 
 signals:
     void build_signal();
-    void close();
+    void close_w();
 
 private:
     Ui::MainWindow *ui;

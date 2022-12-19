@@ -3,6 +3,7 @@
 #include <QLabel>
 #include <QColor>
 #include <iostream>
+#include <QCloseEvent>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -24,7 +25,6 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-    emit close();
     delete ui;
 }
 
@@ -111,4 +111,10 @@ void MainWindow::show_ref()
 void MainWindow::build_graph()
 {
     emit build_signal();
+}
+
+
+void MainWindow::close_event(QCloseEvent* event){
+    emit close_w();
+    event->accept();
 }

@@ -18,6 +18,8 @@ FuncWindow::FuncWindow(QWidget *parent)
     w_graphic->setInteraction(QCP::iRangeDrag, true);
     w_graphic->setInteraction(QCP::iRangeZoom, true);
 
+    setAttribute(Qt::WA_DeleteOnClose);
+
     w_graphic->legend = new QCPLegend;
 
     w_graphic->axisRect()->insetLayout()->addElement(w_graphic->legend, Qt::AlignTop|Qt::AlignRight);

@@ -9,24 +9,16 @@ Grand::Grand()
     w_main=new MainWindow;
 
     connect(w_main, SIGNAL(build_signal()), this, SLOT(build_graph()));
-    connect(w_main, SIGNAL(close()), this, SLOT(close_app()));
+    connect(w_main, SIGNAL(close_w()), this, SLOT(close_app()));
     w_main->show();
-}
-
-Grand::~Grand()
-{
-    std::cout<<"grand deleted\n";
-    w_func.back()->close();
-    w_func.pop_back();
 }
 
 void Grand::build_graph()
 {
-    FuncWindow* func_window=new FuncWindow;
+    FuncWindow* func_window=new FuncWindow(w_main);
     QVector <QString> expressions=w_main->get_exp();
     QVector <QColor> colors=w_main->get_cols();
     for(int j=0; j<expressions.size(); j++){
-        w_func.push_back(func_window);
         if(int i=func_window->add_func(expressions[j], colors[j])!=0){
             // ошибка ввода
             delete func_window;
@@ -52,7 +44,6 @@ void Grand::build_graph()
     else{
         func_window->change_range_y(ran[2], ran[3]);
     }
-    w_func.push_back(func_window);
     func_window->show();
 }
 
