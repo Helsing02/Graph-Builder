@@ -17,11 +17,11 @@ FuncCollection:: ~FuncCollection()
     }
 }
 
-QVector<QVector<QVector<double>>> FuncCollection::get_points(double x_min, double x_max)
+QVector<QVector<QVector<double>>> FuncCollection::get_points(double x_min, double x_max, double m_points)
 {
     QVector<QVector<QVector<double>>> graphs;
 
-    double delta=(x_max-x_min)/10000;
+    double delta=(x_max-x_min)/(700*m_points);
 
     for (Function* f: arr_func)
     {

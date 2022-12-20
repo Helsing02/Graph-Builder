@@ -21,6 +21,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->addBtn, SIGNAL(clicked()), this, SLOT(add_dynamic_f()));
     connect(ui->buildBtn, SIGNAL(clicked()), this, SLOT(build_graph()));
     connect(ui->refBtn, SIGNAL(clicked()), this, SLOT(show_ref()));
+
+    setWindowTitle("GraphicsLab");
 }
 
 MainWindow::~MainWindow()

@@ -6,6 +6,7 @@ error::error(QWidget *parent) :
     ui(new Ui::error)
 {
     ui->setupUi(this);
+    setWindowTitle("ERROR");
     this->setStyleSheet("background-color:rgb(255,255,255);");
 }
 

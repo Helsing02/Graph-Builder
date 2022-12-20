@@ -18,6 +18,7 @@ FuncWindow::FuncWindow(QWidget *parent)
     w_graphic->setInteraction(QCP::iRangeDrag, true);
     w_graphic->setInteraction(QCP::iRangeZoom, true);
 
+
     setAttribute(Qt::WA_DeleteOnClose);
 
     w_graphic->legend = new QCPLegend;
@@ -29,6 +30,8 @@ FuncWindow::FuncWindow(QWidget *parent)
 
     old_min = 0;
     old_max = 5;
+
+    setWindowTitle("GraphicsBuilder");
 }
 
 FuncWindow::~FuncWindow()
@@ -120,7 +123,8 @@ void FuncWindow::rebuild(QCPRange new_range)
             if(new_range.lower < old_min)
             {
                 QVector<QVector<QVector<double>>> graphs;
-                graphs = m_func_collection.get_points(new_range.lower, old_min);
+                double m_div_points = abs(new_range.upper - old_max)/(old_max - old_min);
+                graphs = m_func_collection.get_points(new_range.lower, old_min, m_div_points);
 
                 int index = 0;
                 for(QVector<QVector<double>> m_graph: graphs)
@@ -130,7 +134,7 @@ void FuncWindow::rebuild(QCPRange new_range)
                 }
 
                 graphs.clear();
-                graphs = m_func_collection.get_points(old_max, new_range.upper);
+                graphs = m_func_collection.get_points(old_max, new_range.upper, m_div_points);
 
                 index = 0;
                 for(QVector<QVector<double>> m_graph: graphs)
@@ -144,7 +148,8 @@ void FuncWindow::rebuild(QCPRange new_range)
             if(new_range.lower < old_min){
 
                 QVector<QVector<QVector<double>>> graphs;
-                graphs = m_func_collection.get_points(new_range.lower - (new_range.upper - new_range.lower)/40, old_min);
+                double m_div_points = abs(new_range.upper - old_max)/(old_max - old_min);
+                graphs = m_func_collection.get_points(new_range.lower - (new_range.upper - new_range.lower)/40, old_min, m_div_points);
 
                 int index = 0;
                 for(QVector<QVector<double>> m_graph: graphs)
@@ -155,7 +160,8 @@ void FuncWindow::rebuild(QCPRange new_range)
                 }
             } else {
                 QVector<QVector<QVector<double>>> graphs;
-                graphs = m_func_collection.get_points(old_max, new_range.upper + (new_range.upper - new_range.lower)/40);
+                double m_div_points = abs(new_range.upper - old_max)/(old_max - old_min);
+                graphs = m_func_collection.get_points(old_max, new_range.upper + (new_range.upper - new_range.lower)/40, m_div_points);
 
                 int index = 0;
                 for(QVector<QVector<double>> m_graph: graphs)
