@@ -54,10 +54,11 @@ int Function::set_rpn(string s) {
     stack <string> Stek;
     int len = (int)s.length();
     string symbols;
-    int brackets = 0, dig = 0, checkabs = 0, countroot = 0, next = 0, previous = 0;
-    bool minus_in_root = false;
+    int brackets = 0, dig = 0, oper = 0, checkabs = 0, countroot = 0, check_loga = 0, check_digit_in_abs = 0, count_abs = 0, last_abs = 0, next = 0, previous = 0;
+    bool minus_in_root = false, check_minus = false;
 
     for (int i = 0; i < len; i++) {
+        if (s[i] != '|') last_abs = 0;
         if (digit(s[i])) {
             if (i > 0) {
                 previous = i - 1;
@@ -83,29 +84,32 @@ int Function::set_rpn(string s) {
             if (i == len - 1) return 3;
             next = i + 1;
             while (next < len - 1 && s[next] == ' ') next++;
-            if (s[next] == ')' && s[next] == ',') return 3;
+            if (s[next] == ')' || s[next] == ',') return 3;
             if (minus_in_root == true && operation(s[next])) return 3;
             int next2 = next + 1;
             while (next2 < len - 1 && s[next2] == ' ') next2++;
             if (operation(s[next]) && operation(s[next2])) return 3;
 
-            if (i == 0 && s[i] != '-') return 2;
+            if (i == 0 && s[i] != '-') return 3;
+            if (i == 0 && s[i] == '-' && operation(s[next])) return 3;
             previous = i;
             if (i > 0) {
                 previous = i - 1;
                 while (previous > 0 && s[previous] == ' ') previous--;
-                if (i != 0 && s[previous] == '(' && operation(s[next])) return 3;
+                if (i != 0 && (s[previous] == '(' || s[previous] == '|') && operation(s[next])) return 3;
                 if (previous == 0 && s[previous] == ' ' && s[i] != '-') return 3;
                 if ((s[i] != '-') && operation(s[previous])) return 3;
             }
             symbols = s[i];
-            if ((s[i] == '-') && ((previous == 0 && s[previous] == ' ') || operation(s[previous]) || s[previous] == '(' || minus_in_root == true || s[previous] == '|')) symbols = "~";
+            if ((s[i] == '-') && ((previous == 0 && s[previous] == ' ') || operation(s[previous]) || s[previous] == '(' || minus_in_root == true || check_minus == true)) symbols = "~";
+            check_minus = false;
             while ((!Stek.empty()) && (operationPriority[Stek.top()] >= operationPriority[symbols])) {
                 m_expression.push_back(Stek.top());
                 Stek.pop();
             }
             minus_in_root = false;
             Stek.push(symbols);
+            oper++;
         }
         else if (letter(s[i])) {
             if (i > 0) {
@@ -133,6 +137,7 @@ int Function::set_rpn(string s) {
                         countroot++;
                         symbols = "root()";
                         i = i + 3;
+                        oper++;
                     }
                     else return 2;
                     break;
@@ -287,10 +292,31 @@ int Function::set_rpn(string s) {
                     else if ((s[i + 1] == 'o') && (s[i + 2] == 'g') && (s[i + 3] == '1') && (s[i + 4] == '0') && (s[i + 5] == '(')) {
                         symbols = "log10()";
                         i = i + 4;
+                        check_loga++;
                     }
-                    else if ((s[i + 1] == 'o') && (s[i + 2] == 'g') && (s[i + 3] == '(')) {
+                    else if ((s[i + 1] == 'o') && (s[i + 2] == 'g')) {
                         symbols = "loga()";
+                        int i1 = i + 3;
+                        if (digit(s[i1])) {
+                            while (s[i1] != '(') {
+                                if (i1 == len - 1 || !(digit(s[i1]))) return 2;
+                                i1++;
+                            }
+                            check_loga++;
+                        }
+                        else if (s[i1] == '(') {
+                            int check1 = 1;
+                            i1++;
+                            while (check1 != 0) {
+                                if (s[i1] == '(') check1++;
+                                if (s[i1] == ')') check1--;
+                                i1++;
+                            }
+                            if (s[i1] != '(') return 1;
+                        }
+                        else return 3;
                         i = i + 2;
+                        oper++;
                     }
                     else return 2;
                     break;
@@ -319,8 +345,17 @@ int Function::set_rpn(string s) {
                     Stek.push("(");
                     brackets++;
                     checkabs++;
+                    check_digit_in_abs = dig;
+                    next = i + 1;
+                    while (next < len - 1 && s[next] == ' ') next++;
+                    if (s[next] == '-') check_minus = true;
+                    last_abs = 1;
                 }
                 else if (i == len - 1 && checkabs > 0) {
+                    if (last_abs == 1) return 3;
+                    previous = i - 1;
+                    while (previous > 0 && s[previous] == ' ') previous--;
+                    if (operation(s[previous])) return 3;
                     while ((!Stek.empty()) && (Stek.top() != "(")) {
                         m_expression.push_back(Stek.top());
                         Stek.pop();
@@ -328,6 +363,8 @@ int Function::set_rpn(string s) {
                     if (Stek.top() == "(") Stek.pop();
                     brackets--;
                     checkabs--;
+                    if (check_digit_in_abs == dig) return 3;
+                    check_digit_in_abs = 0;
                 }
                 else {
                     previous = i - 1;
@@ -337,6 +374,7 @@ int Function::set_rpn(string s) {
                     while (next < len - 1 && s[next] == ' ') next++;
 
                     if ((operation(s[previous]) || s[previous] == '(' || s[previous] == ',' || s[previous] == '|' || s[previous] == ' ') && (letter(s[next]) || digit(s[next]) || s[next] == '(' || s[next] == '|' || s[next] == '-')) {
+                        if (last_abs == 2) return 3;
                         while ((!Stek.empty()) && (operationPriority[Stek.top()] >= operationPriority["abs()"])) {
                             m_expression.push_back(Stek.top());
                             Stek.pop();
@@ -345,9 +383,16 @@ int Function::set_rpn(string s) {
                         Stek.push("(");
                         brackets++;
                         checkabs++;
+                        check_digit_in_abs = dig;
+                        if (s[next] == '-') check_minus = true;
+                        last_abs = 1;
                     }
                     else if ((letter(s[previous]) || digit(s[previous]) || s[previous] == ')' || s[previous] == '|') && (operation(s[next]) || s[next] == ')' || s[next] == ',' || s[next] == '|' || s[next] == ' ')) {
-                        if (checkabs == 0) return 2;
+                        if (checkabs == 0) return 3;
+                        if (last_abs == 1) return 3;
+                        previous = i - 1;
+                        while (previous > 0 && s[previous] == ' ') previous--;
+                        if (operation(s[previous])) return 3;
                         while ((!Stek.empty()) && (Stek.top() != "(")) {
                             m_expression.push_back(Stek.top());
                             Stek.pop();
@@ -355,8 +400,11 @@ int Function::set_rpn(string s) {
                         if (Stek.top() == "(") Stek.pop();
                         brackets--;
                         checkabs--;
+                        if (check_digit_in_abs == dig) return 3;
+                        check_digit_in_abs = 0;
+                        last_abs = 2;
                     }
-                    else return 2;
+                    else return 3;
                 }
                 break;
             case '(':
@@ -365,6 +413,12 @@ int Function::set_rpn(string s) {
                 while (next < len - 1 && s[next] == ' ') next++;
                 if (s[next] == ')') return 4;
                 if (s[next] == ' ' && next == len - 1) return 4;
+                if (i > 0) {
+                    previous = i - 1;
+                    while (previous > 0 && s[previous] == ' ') previous--;
+                    if (digit(s[previous]) && check_loga == 0) return 4;
+                }
+                check_loga--;
                 Stek.push("(");
                 brackets++;
                 break;
@@ -374,15 +428,22 @@ int Function::set_rpn(string s) {
                 if (i < len - 1) {
                     next++;
                     while (next < len - 1 && s[next] == ' ') next++;
-                    if (!operation(s[next]) && s[next] != ')' && s[next] != ',' && s[next] != '(' && s[next] != ' ') return 2;
+                    if (!operation(s[next]) && s[next] != ')' && s[next] != ',' && s[next] != '(' && s[next] != ' ' && s[next] != '|') return 3;
                 }
+                previous = i;
+                while (s[previous] != '(' && previous > 0) {
+                    if (s[previous] == '|') count_abs++;
+                    previous--;
+                }
+                if (count_abs % 2 == 1) return 1;
+                count_abs = 0;
                 while ((!Stek.empty()) && (Stek.top() != "(")) {
                     m_expression.push_back(Stek.top());
                     Stek.pop();
                 }
                 if (Stek.top() == "(") Stek.pop();
                 brackets--;
-                if (((Stek.empty()) || (!Stek.empty() && Stek.top() != "loga()")) && next != i && s[next] == '(') return 1;
+                if ((Stek.empty() && s[next] == '(') || (!Stek.empty() && Stek.top() != "loga()" && s[next] == '(')) return 1;
                 break;
             case ' ':
                 break;
@@ -395,7 +456,7 @@ int Function::set_rpn(string s) {
                     while (s[next] == ' ') next++;
                     i = next - 1;
                     if (s[next] == '-') minus_in_root = true;
-                    else if (!digit(s[next]) && !letter(s[next]) && s[next] != '(') return 2;
+                    else if (!digit(s[next]) && !letter(s[next]) && s[next] != '(') return 3;
                     while ((!Stek.empty()) && (Stek.top() != "(")) {
                         m_expression.push_back(Stek.top());
                         Stek.pop();
@@ -405,7 +466,7 @@ int Function::set_rpn(string s) {
                 else return 4;
                 break;
             default:
-                return 2;
+                return 3;
                 break;
             }
         }
@@ -420,6 +481,7 @@ int Function::set_rpn(string s) {
     if (brackets != 0) return 1;
     if (checkabs != 0) return 3;
     if ((dig == 0) || (countroot != 0)) return 4;
+    if (dig >= 2 && oper == 0) return 4;
     return 0;
 }
 
@@ -466,6 +528,7 @@ double Function::get_y(double x) {
                 z = first / second;
                 break;
             case '^':
+                if (first == 0.0 && second == 0.0) return nan("1");
                 z = pow(first, second);
                 break;
             }
@@ -481,7 +544,7 @@ double Function::get_y(double x) {
                 Stek1.pop();
                 first = Stek1.top();
                 Stek1.pop();
-                if (first == 1 || first < 0) return nan("1");
+                if (first == 1 || first <= 0) return nan("1");
                 z = (log10(second)) / (log10(first));
             }
             else if (s == "root()") {
@@ -526,18 +589,18 @@ double Function::get_y(double x) {
                     else z = -1.0;
                 }
                 else {
-                    cout << "Error when finding Y";
                     exit(0);
                 }
             }
         }
         else z = nan("1");
 
-        if (isnan(z)) return nan("1");
+        if (isnan(z) || isinf(abs(z))) return nan("1");
         else Stek1.push(z);
     }
     first = Stek1.top();
     Stek1.pop();
-    if (isnan(first)) return nan("1");
+    if (first == -0.0) return 0;
+    if (isnan(first) || isinf(abs(z))) return nan("1");
     else return first;
 }
