@@ -8,6 +8,7 @@ error::error(QWidget *parent) :
     ui->setupUi(this);
     setWindowTitle("ERROR");
     this->setStyleSheet("background-color:rgb(255,255,255);");
+    ui->text->setText("Ошибка связана с написание формул ");
 }
 
 error::~error()
@@ -15,15 +16,15 @@ error::~error()
     delete ui;
 }
 
-void error::erro(int i){
-    if(i==1)
-        ui->text->setText("Ошибка связана со скобками ");
-    else if(i==2)
-        ui->text->setText("Некорректно введеные данные ");
-    else if(i==3)
-        ui->text->setText("Ошибка связана с некорректность введных операций ");
-    else if(i==4)
-        ui->text->setText("Строка не заполнена ");
-}
+//void error::erro(int i){
+//    if(i==1)
+//        ui->text->setText("Ошибка связана со скобками ");
+//    else if(i==2)
+//        ui->text->setText("Некорректно введеные данные ");
+//    else if(i==3)
+//        ui->text->setText("Ошибка связана с некорректность введных операций ");
+//    else if(i==4)
+//        ui->text->setText("Строка не заполнена ");
+//}
 
 

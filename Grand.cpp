@@ -19,11 +19,12 @@ void Grand::build_graph()
     QVector <QString> expressions=w_main->get_exp();
     QVector <QColor> colors=w_main->get_cols();
     for(int j=0; j<expressions.size(); j++){
-        if(int i=func_window->add_func(expressions[j], colors[j])!=0){
+        int i=func_window->add_func(expressions[j], colors[j]);
+        if(i!=0){
             // ошибка ввода
             delete func_window;
             error* window_err=new error;
-            window_err->erro(i);
+//            window_err->erro(i);
             window_err->setModal(true);
             window_err->show();
             return;

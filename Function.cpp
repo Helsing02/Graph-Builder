@@ -10,6 +10,8 @@
 #define PI 3.14159265
 
 using std::string;
+using std::isnan;
+using std::isinf;
 using std::stack;
 using std::map;
 using std::cout;

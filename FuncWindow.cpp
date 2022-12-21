@@ -27,7 +27,7 @@ FuncWindow::FuncWindow(QWidget *parent)
     w_graphic->legend->setLayer("legend");
 
     connect(w_graphic->xAxis, SIGNAL(rangeChanged(QCPRange)), this, SLOT(rebuild(QCPRange)));
-
+    connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(save_pic()));
     old_min = 0;
     old_max = 5;
 

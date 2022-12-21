@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "qcustomplot.h"
 #include "FuncCollection.h"
+#include <QPushButton>
 
 namespace Ui
 {
