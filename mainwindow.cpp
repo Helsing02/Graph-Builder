@@ -4,6 +4,7 @@
 #include <QColor>
 #include <iostream>
 #include <QCloseEvent>
+#include <cmath>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -52,17 +53,33 @@ QVector <QColor> MainWindow::get_cols()
     return to_ret;
 }
 
-QVector <double> MainWindow::get_range()
+QVector <double> MainWindow::get_range(bool &flag)
 {
     QVector <double> to_ret;
-    to_ret.push_back(((ui->xMin)->text()).toDouble());
-    to_ret.push_back(((ui->xMax)->text()).toDouble());
-    if (ui->autoRange->isChecked()){
-        to_ret.push_back(((ui->xMin)->text()).toDouble());
-        to_ret.push_back(((ui->xMax)->text()).toDouble());
-    } else {
-        to_ret.push_back(((ui->yMin)->text()).toDouble());
-        to_ret.push_back(((ui->yMax)->text()).toDouble());
+    double x1=(ui->xMax)->text().toDouble(&flag);
+    if (flag){
+        double x2=(ui->xMin)->text().toDouble(&flag);
+        if(flag){
+            if(x1<=x2)
+                flag=false;
+            else{
+                to_ret.push_back(x1);
+                to_ret.push_back(x2);
+                if (ui->autoRange->isChecked()){
+                    to_ret.push_back(((ui->xMin)->text()).toDouble());
+                    to_ret.push_back(((ui->xMax)->text()).toDouble());
+                } else {
+                    double y1=(ui->yMax)->text().toDouble(&flag);
+                    if (flag){
+                        to_ret.push_back(y1);
+                        double y2=(ui->yMin)->text().toDouble(&flag);
+                        to_ret.push_back(y2);
+                        if(flag&&y1<=y2)
+                            flag=false;
+                    }
+                }
+            }
+        }
     }
     return to_ret;
 }

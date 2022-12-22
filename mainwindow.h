@@ -19,7 +19,7 @@ public:
     ~MainWindow();
     QVector <QString> get_exp();
     QVector <QColor> get_cols();
-    QVector <double> get_range();
+    QVector <double> get_range(bool&);
     bool auto_range_is_checked();
     bool is_range_in_pi ();
 

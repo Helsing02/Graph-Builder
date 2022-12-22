@@ -563,7 +563,7 @@ double Function::get_y(double x) {
                 Stek1.pop();
                 first = Stek1.top();
                 Stek1.pop();
-                z = pow(abs(first), 1.0 / second);
+                z = pow(fabs(first), 1.0 / second);
                 if (first < 0 && (floor(second) == second) && ((int)second % 2 != 0)) z = 0 - z;
                 if (first < 0 && (floor(second) == second) && ((int)second % 2 == 0)) return nan("1");
             }
@@ -592,7 +592,7 @@ double Function::get_y(double x) {
                 else if (s == "log()") z = log(first);
                 else if (s == "log10()") z = log10(first);
                 else if (s == "exp()") z = exp(first);
-                else if (s == "abs()") z = abs(first);
+                else if (s == "abs()") z = fabs(first);
                 else if (s == "grad()") z = first * (PI / 180);
                 else if (s == "sgn()") {
                     if (first > 0) z = 1.0;
@@ -606,12 +606,12 @@ double Function::get_y(double x) {
         }
         else z = nan("1");
 
-        if (isnan(z) || isinf(abs(z))) return nan("1");
+        if (isnan(z) || isinf(fabs(z))) return nan("1");
         else Stek1.push(z);
     }
     first = Stek1.top();
     Stek1.pop();
     if (first == -0.0) return 0;
-    if (isnan(first) || isinf(abs(z))) return nan("1");
+    if (isnan(first) || isinf(fabs(z))) return nan("1");
     else return first;
 }
