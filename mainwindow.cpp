@@ -17,6 +17,17 @@ MainWindow::MainWindow(QWidget *parent)
     ui->yMin->setEnabled(false);
     ui->yMax->setEnabled(false);
 
+    scrollArea=new QScrollArea(this);
+    ui->FuncLayout->addWidget(scrollArea);
+    scrollArea_content=new QWidget();
+    labelLayout=new QVBoxLayout(scrollArea_content);
+    scrollArea->setWidget(scrollArea_content);
+    scrollArea->setWidgetResizable(true);
+    labelLayout->addStretch();
+//    labelLayout= new QVBoxLayout(scrollArea);
+//    scrollLayot= new QVBoxLayout;
+//    QVBoxLayout *layout = new QVBoxLayout;
+
     add_dynamic_f();
     connect(ui->autoRange, SIGNAL(stateChanged(int)), this, SLOT(set_enabled_auto_range(int)));
     connect(ui->addBtn, SIGNAL(clicked()), this, SLOT(add_dynamic_f()));
@@ -95,11 +106,21 @@ bool MainWindow::is_range_in_pi()
 }
 
 void MainWindow::add_dynamic_f()
-{
-    DynamicField* df= new DynamicField(this);
+{  
+//    QVBoxLayout* labelLayout=new QVBoxLayout(scrollArea);
+
+    DynamicField* df= new DynamicField(scrollArea_content);
+//    scrollArea = new QScrollArea;
+//    scrollArea->setBackgroundRole(QPalette::Dark);
+//    scrollArea->setWidget(df);
+    int count=labelLayout->count();
+    labelLayout->insertWidget(count-1, df);
+
     connect(df, SIGNAL(delete_field(DynamicField*)), this, SLOT(delete_dynamic_f(DynamicField*)));
     fields.push_back(df);
-    ui->FuncLayout->addWidget(df);
+
+
+//    ui->FuncLayout->addWidget(df);
 }
 
 void MainWindow::delete_dynamic_f(DynamicField* df)

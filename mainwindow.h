@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "DynamicField.h"
+#include "qscrollarea.h"
 #include "ref.h"
 
 
@@ -41,6 +42,9 @@ private:
     Ui::MainWindow *ui;
     QVector <DynamicField*> fields;
     Ref* ref;
+    QScrollArea* scrollArea;
+    QVBoxLayout *labelLayout;
+    QWidget* scrollArea_content;
 
 };
 #endif // MAINWINDOW_H

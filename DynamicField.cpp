@@ -34,6 +34,11 @@ DynamicField::DynamicField(QWidget* parent):
     m_upper->addWidget(m_fx);
     m_upper->addWidget(m_input_line);
 
+//    ui->scrollArea->setWidget(m_fx);
+//    parent->scrollArea->setWidget(m_check_box);
+//    parent->scrollArea->setWidget(m_btn_delete);
+//    parent->scrollArea->setWidget(m_btn_color);
+
     m_color=0x880033ff;
 
     QAbstractButton::connect(m_btn_delete, SIGNAL(clicked()), this, SLOT(del_btn_clicked()));
