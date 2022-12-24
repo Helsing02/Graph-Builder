@@ -35,8 +35,8 @@ private:
     FuncCollection m_func_collection;
     double x_old_min;
     double x_old_max;
+    double y_att_x;
     double y_old_min;
-    double y_old_max;
 };
 
 #endif // FUNCWINDOW_H

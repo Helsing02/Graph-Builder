@@ -22,7 +22,7 @@ QVector<QVector<QVector<double>>> FuncCollection::get_points(double x_min, doubl
 {
     QVector<QVector<QVector<double>>> graphs;
     double m_inf = pow(2,12);
-    double delta=(x_max-x_min)/(1000*m_points);
+    double delta=(x_max-x_min)/(100000*m_points);
 
     for (Function* f: arr_func)
     {
@@ -94,6 +94,7 @@ QVector<QVector<QVector<double>>> FuncCollection::get_points(double x_min, doubl
                 }
             }
 */
+            /*
             if(y.count() >= 4 && (fabs(y[y.count() - 4] - y[y.count() - 3]) +
                     fabs(y[y.count() - 2] - y[y.count() - 1]) < fabs(y[y.count() - 3] - y[y.count() - 2])))
             {
@@ -124,6 +125,7 @@ QVector<QVector<QVector<double>>> FuncCollection::get_points(double x_min, doubl
                     i -= delta;
                 }
             }
+            */
 
 
         }

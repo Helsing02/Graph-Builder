@@ -30,8 +30,8 @@ FuncWindow::FuncWindow(QWidget *parent)
 
     x_old_min = 0;
     x_old_max = 5;
+    y_att_x=1;
     y_old_min = 0;
-    y_old_max = 5;
 
     setWindowTitle("GraphicsBuilder");
 }
@@ -103,8 +103,8 @@ void FuncWindow::find_range_y()
     if(y_min < -100) y_min = -100;
     w_graphic->yAxis->setRange(y_min, y_max);
 
-    y_old_min = y_min;
-    y_old_max = y_max;
+    y_att_x=(y_max-y_min)/(x_old_max-x_old_min);
+    y_old_min=y_min;
 }
 
 void FuncWindow::change_range_x(double x_min, double x_max)
@@ -117,32 +117,40 @@ void FuncWindow::change_range_x(double x_min, double x_max)
 void FuncWindow::change_range_y(double y_min, double y_max)
 {
     w_graphic->yAxis->setRange(y_min, y_max);
-    y_old_min = y_min;
-    y_old_max = y_max;
+    y_att_x=(y_max-y_min)/(x_old_max-x_old_min);
+    y_old_min=y_min;
 }
 
 void FuncWindow::rebuild(QCPRange new_range)
 {
-    if(new_range.upper - new_range.lower > 300)
+    if((new_range.upper - new_range.lower) >= 500 || (new_range.upper - new_range.lower)<=1)
     {
+        std::cout<<x_old_min<<" "<<x_old_max<<" "<<new_range.lower<<" "<<new_range.upper<<std::endl;
         w_graphic->xAxis->setRange(x_old_min, x_old_max);
-        w_graphic->yAxis->setRange(y_old_min, y_old_max);
+        w_graphic->yAxis->setRange(y_old_min, y_old_min+(x_old_max-x_old_min)*y_att_x);
         std::cout << "Stoped\n";
     }
     else
     {
-        std::cout << y_old_min << " " << y_old_max << std::endl;
-
         double m_zoom_coef = (new_range.upper - new_range.lower)/(x_old_max - x_old_min);
         std::cout<<x_old_min<<" "<<x_old_max<<" "<<new_range.lower<<" "<<new_range.upper<<std::endl;
 
-        double m_dif = (w_graphic->yAxis->range().upper - w_graphic->yAxis->range().lower) - (y_old_max - y_old_min);
-        y_old_min = w_graphic->yAxis->range().lower + m_dif;
-        y_old_max = w_graphic->yAxis->range().upper - m_dif;
-        if(abs(new_range.lower - x_old_min) > (new_range.upper - new_range.lower)/100 &&
-                abs(new_range.upper - x_old_max) > (new_range.upper - new_range.lower)/100)
+
+        if(abs(new_range.lower - x_old_min) > (x_old_max - x_old_min)/30 &&
+                abs(new_range.upper - x_old_max) > (x_old_max - x_old_min)/30)
         {
-            if((new_range.upper-new_range.lower)!=(x_old_max-x_old_min)){
+            /*
+            QVector<QVector<QVector<double>>> graphs;
+            graphs = m_func_collection.get_points(new_range.lower, new_range.upper, m_zoom_coef);
+
+            int index = 0;
+            for(QVector<QVector<double>> m_graph: graphs)
+            {
+                w_graphic->graph(index)->setData(m_graph[0], m_graph[1]);
+                index++;
+            }
+            */
+            if(round((new_range.upper-new_range.lower)*1000)/1000!=round((x_old_max-x_old_min)*1000)/1000){
                 std::cout<<"change size\n";
 
                 QVector<QVector<QVector<double>>> graphs;
@@ -154,32 +162,6 @@ void FuncWindow::rebuild(QCPRange new_range)
                     w_graphic->graph(index)->setData(m_graph[0], m_graph[1]);
                     index++;
                 }
-
-                //y_old_min = w_graphic->yAxis->range().lower;
-                //y_old_max = w_graphic->yAxis->range().upper;
-                /*if(new_range.lower < x_old_min)
-                {
-                    QVector<QVector<QVector<double>>> graphs;
-                    double m_div_points = abs(new_range.upper - x_old_max)/(x_old_max - x_old_min);
-                    graphs = m_func_collection.get_points(new_range.lower, x_old_min, m_div_points);
-
-                    int index = 0;
-                    for(QVector<QVector<double>> m_graph: graphs)
-                    {
-                        w_graphic->graph(index)->addData(m_graph[0], m_graph[1]);
-                        index++;
-                    }
-
-                    graphs.clear();
-                    graphs = m_func_collection.get_points(x_old_max, new_range.upper, m_div_points);
-
-                    index = 0;
-                    for(QVector<QVector<double>> m_graph: graphs)
-                    {
-                        w_graphic->graph(index)->addData(m_graph[0], m_graph[1]);
-                        index++;
-                    }
-                }*/
             } else {
                 std::cout<<"grab\n";
                 if(new_range.lower < x_old_min){
@@ -187,7 +169,6 @@ void FuncWindow::rebuild(QCPRange new_range)
                     QVector<QVector<QVector<double>>> graphs;
                     double m_div_points = abs(new_range.upper - x_old_max)/(x_old_max - x_old_min);
                     graphs = m_func_collection.get_points(new_range.lower - (new_range.upper - new_range.lower)/40, x_old_min, m_div_points * m_zoom_coef);
-
                     int index = 0;
                     for(QVector<QVector<double>> m_graph: graphs)
                     {
@@ -210,9 +191,12 @@ void FuncWindow::rebuild(QCPRange new_range)
                 }
 
             }
+
             w_graphic->replot();
             x_old_min = new_range.lower;
             x_old_max = new_range.upper;
+
+            y_old_min=w_graphic->yAxis->range().lower;
         }
     }
 }

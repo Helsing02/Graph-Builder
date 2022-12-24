@@ -115,8 +115,8 @@ void MainWindow::build_graph()
     emit build_signal();
 }
 
-
-void MainWindow::close_event(QCloseEvent* event){
+void MainWindow::close_event(QCloseEvent* event)
+{
     emit close_w();
     event->accept();
 }
