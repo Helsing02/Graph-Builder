@@ -13,9 +13,9 @@ private:
     bool letter(char);
     bool digit(char);
     bool operation(char);
-    bool set_rpn(std::string);
+    int set_rpn(std::string);
     
 public:
-    bool set_exp(std::string);
+    int set_exp(std::string);
     double get_y(double);
 };
