@@ -14,8 +14,11 @@ DynamicField::DynamicField(QWidget* parent):
     m_check_box->setText("Отображать");
     m_check_box->setChecked(true);
 
-    m_push_button = new QPushButton(this);
-    m_push_button->setText("Удалить");
+    m_btn_delete = new QPushButton(this);
+    m_btn_delete->setText("Удалить");
+
+    m_btn_color = new QPushButton(this);
+    m_btn_color->setText("Цвет");
 
     m_layout=new QVBoxLayout(this);
     m_upper=new QHBoxLayout(this);
@@ -25,29 +28,46 @@ DynamicField::DynamicField(QWidget* parent):
 
     m_lower->addStretch();
     m_lower->addWidget(m_check_box);
-    m_lower->addWidget(m_push_button);
-
+    m_lower->addWidget(m_btn_delete);
+    m_lower->addWidget(m_btn_color);
 
     m_upper->addWidget(m_fx);
     m_upper->addWidget(m_input_line);
 
-    QAbstractButton::connect(m_push_button, SIGNAL(clicked()), this, SLOT(b_clicked()));
+//    ui->scrollArea->setWidget(m_fx);
+//    parent->scrollArea->setWidget(m_check_box);
+//    parent->scrollArea->setWidget(m_btn_delete);
+//    parent->scrollArea->setWidget(m_btn_color);
+
+    m_color=0x880033ff;
+
+    QAbstractButton::connect(m_btn_delete, SIGNAL(clicked()), this, SLOT(del_btn_clicked()));
+    QAbstractButton::connect(m_btn_color, SIGNAL(clicked()), this, SLOT(col_btn_clicked()));
 
 }
 
-void DynamicField::b_clicked(){
-    emit delete_field(this);
-}
-//для цвета
-void DynamicField::c_2_clicked(){
-    QColor ColorValue=QColorDialog::getColor(Qt::white);
-    qDebug()<<ColorValue;
-}
-
-QString DynamicField::text(){
+QString DynamicField::get_exp()
+{
     return m_input_line->text();
 }
 
-bool DynamicField::visibility(){
+QColor DynamicField::get_color()
+{
+    return m_color;
+}
+
+bool DynamicField::disp_is_checked()
+{
     return m_check_box->isChecked();
+}
+//для цвета
+void DynamicField::col_btn_clicked()
+{
+    m_color=QColorDialog::getColor(Qt::white);
+    m_btn_color->setStyleSheet( QString("background-color: %1").arg(m_color.name()));
+}
+
+void DynamicField::del_btn_clicked()
+{
+    emit delete_field(this);
 }

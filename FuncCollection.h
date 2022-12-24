@@ -10,5 +10,5 @@ class FuncCollection
 public:
     ~FuncCollection();
     int add_func(std::string);
-    QVector<QVector<QVector<double>>> get_points(double, double);
+    QVector<QVector<QVector<double>>> get_points(double, double, double m_points = 1);
 };

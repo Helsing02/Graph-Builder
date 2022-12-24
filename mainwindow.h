@@ -3,7 +3,9 @@
 
 #include <QMainWindow>
 #include "DynamicField.h"
-#include "FuncWindow.h"
+#include "qscrollarea.h"
+#include "ref.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -16,18 +18,33 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    QVector <QString> get_exp();
+    QVector <QColor> get_cols();
+    QVector <double> get_range(bool&);
+    bool auto_range_is_checked();
+    bool is_range_in_pi ();
+
+private:
+    void close_event(QCloseEvent* event);
 
 private slots:
     void add_dynamic_f();
     void delete_dynamic_f(DynamicField* df=nullptr);
+    void set_enabled_auto_range(int);
+    void show_ref();
     void build_graph();
-    void disable_y(int);
 
-    void on_pushButton_clicked();
+signals:
+    void build_signal();
+    void close_w();
 
 private:
     Ui::MainWindow *ui;
     QVector <DynamicField*> fields;
+    Ref* ref;
+    QScrollArea* scrollArea;
+    QVBoxLayout *labelLayout;
+    QWidget* scrollArea_content;
 
 };
 #endif // MAINWINDOW_H

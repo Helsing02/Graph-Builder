@@ -2,12 +2,16 @@ cmake_minimum_required(VERSION 3.5)
 
 project(graphics VERSION 0.1 LANGUAGES CXX)
 
+
+
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(APP_ICON_RESOURCE_WINDOWS "${CMAKE_CURRENT_SOURCE_DIR}/icon_file.rc")
+
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
@@ -41,13 +45,20 @@ set(PROJECT_SOURCES
         error.cpp
         error.h
         error.ui
+
+        Grand.h
+        Grand.cpp
+
+        icon_file.rc
+        GraphicsLab_icon.ico
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(graphics
-        MANUAL_FINALIZATION
-        ${PROJECT_SOURCES}
+        MANUAL_FINALIZATION ${PROJECT_SOURCES}
+        ${app_icon_resource_windows}
     )
+
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET graphics APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
 #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
@@ -60,9 +71,7 @@ else()
 # Define properties for Android with Qt 5 after find_package() calls as:
 #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
-        add_executable(graphics
-            ${PROJECT_SOURCES}
-        )
+        add_executable(griphics main.cpp ${APP_ICON_RESOURCE_WINDOWS})
     endif()
 endif()
 
