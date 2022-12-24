@@ -96,6 +96,7 @@ bool Function::set_rpn(string s) {
                 while (previous > 0 && s[previous] == ' ') previous--;
                 if (i != 0 && (s[previous] == '(' || s[previous] == '|') && operation(s[next])) return false;
                 if (previous == 0 && s[previous] == ' ' && s[i] != '-') return false;
+                if ((s[previous] == '(' || s[previous] == ',') && s[i] != '-') return false;
             }
             symbols = s[i];
             if ((s[i] == '-') && (i == 0 || (previous == 0 && s[previous] == ' ') || s[previous] == '(' || minus_in_root == true || check_minus == true)) symbols = "~";
@@ -130,7 +131,7 @@ bool Function::set_rpn(string s) {
                 int f = 0;
                 switch (s[i]) {
                 case 'r':
-                    if ((i + 4 < len) && (s[i + 1] == 'o') && (s[i + 2] == 'o') && (s[i + 3] == 't') && (s[i + 4] == '(')) {
+                    if ((i + 4 < len) && (s[i + 1] == 'o') && (s[i + 2] == 'o') && (s[i + 3] == 't')) {
                         countroot++;
                         symbols = "root()";
                         i = i + 3;
@@ -297,7 +298,7 @@ bool Function::set_rpn(string s) {
                         if (digit(s[i1])) {
                             check_loga = 1;
                             while (s[i1] != '(') {
-                                if (i1 == len - 1 || !(digit(s[i1]))) return false;
+                                if (i1 == len - 1 || (!(digit(s[i1])) && s[i1] != '.')) return false;
                                 i1++;
                             }
                         }
@@ -321,6 +322,7 @@ bool Function::set_rpn(string s) {
                     return false;
                     break;
                 }
+                if ((symbols != "e" && symbols != "loga()" && symbols != "log10()") && s[i + 1] != '(') return false;
                 if (symbols != "e") {
                     while ((!Stek.empty()) && (operationPriority[Stek.top()] >= operationPriority[symbols])) {
                         m_expression.push_back(Stek.top());
@@ -457,12 +459,17 @@ bool Function::set_rpn(string s) {
                     while (s[next] == ' ') next++;
                     i = next - 1;
                     if (s[next] == '-') minus_in_root = true;
-                    else if (!digit(s[next]) && !letter(s[next]) && s[next] != '(') return false;
+                    else if (!digit(s[next]) && !letter(s[next]) && s[next] != '(' && s[next] != '|') return false;
                     while ((!Stek.empty()) && (Stek.top() != "(")) {
                         m_expression.push_back(Stek.top());
                         Stek.pop();
                     }
                     countroot--;
+                    if (!Stek.empty()) {
+                        Stek.pop();
+                        if (Stek.top() != "root()") return false;
+                        Stek.push("(");
+                    }
                 }
                 else return false;
                 break;
