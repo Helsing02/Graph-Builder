@@ -30,7 +30,15 @@ void Grand::build_graph()
         }
     }
     func_window->add_graphs(0, 5);
-    QVector <double> ran=w_main->get_range();
+    int ok;
+    QVector <double> ran=w_main->get_range(&ok);
+    if (ok){
+        error* window_err=new error;
+        window_err->erro(ok);
+        window_err->setModal(true);
+        window_err->show();
+        return;
+    }
     if(w_main->is_range_in_pi()){
         func_window->set_range_pi(ran[0], ran[1]);
     }

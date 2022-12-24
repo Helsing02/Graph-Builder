@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "DynamicField.h"
+#include "qscrollarea.h"
 #include "ref.h"
 
 
@@ -19,7 +20,7 @@ public:
     ~MainWindow();
     QVector <QString> get_exp();
     QVector <QColor> get_cols();
-    QVector <double> get_range();
+    QVector <double> get_range(int* ok = nullptr);
     bool auto_range_is_checked();
     bool is_range_in_pi ();
 
@@ -41,6 +42,9 @@ private:
     Ui::MainWindow *ui;
     QVector <DynamicField*> fields;
     Ref* ref;
+    QScrollArea* scrollArea;
+    QVBoxLayout *labelLayout;
+    QWidget* scrollArea_content;
 
 };
 #endif // MAINWINDOW_H
