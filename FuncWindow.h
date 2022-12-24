@@ -4,7 +4,6 @@
 #include <QMainWindow>
 #include "qcustomplot.h"
 #include "FuncCollection.h"
-#include <QPushButton>
 
 namespace Ui
 {
@@ -34,8 +33,10 @@ private:
     Ui::FuncWindow *ui;
     QCustomPlot *w_graphic;
     FuncCollection m_func_collection;
-    double old_min;
-    double old_max;
+    double x_old_min;
+    double x_old_max;
+    double y_att_x;
+    double y_old_min;
 };
 
 #endif // FUNCWINDOW_H

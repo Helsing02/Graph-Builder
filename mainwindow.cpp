@@ -4,7 +4,6 @@
 #include <QColor>
 #include <iostream>
 #include <QCloseEvent>
-#include <cmath>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -16,17 +15,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->xMax->setText("10");
     ui->yMin->setEnabled(false);
     ui->yMax->setEnabled(false);
-
-    scrollArea=new QScrollArea(this);
-    ui->FuncLayout->addWidget(scrollArea);
-    scrollArea_content=new QWidget();
-    labelLayout=new QVBoxLayout(scrollArea_content);
-    scrollArea->setWidget(scrollArea_content);
-    scrollArea->setWidgetResizable(true);
-    labelLayout->addStretch();
-//    labelLayout= new QVBoxLayout(scrollArea);
-//    scrollLayot= new QVBoxLayout;
-//    QVBoxLayout *layout = new QVBoxLayout;
 
     add_dynamic_f();
     connect(ui->autoRange, SIGNAL(stateChanged(int)), this, SLOT(set_enabled_auto_range(int)));
@@ -64,33 +52,17 @@ QVector <QColor> MainWindow::get_cols()
     return to_ret;
 }
 
-QVector <double> MainWindow::get_range(bool &flag)
+QVector <double> MainWindow::get_range()
 {
     QVector <double> to_ret;
-    double x1=(ui->xMax)->text().toDouble(&flag);
-    if (flag){
-        double x2=(ui->xMin)->text().toDouble(&flag);
-        if(flag){
-            if(x1<=x2)
-                flag=false;
-            else{
-                to_ret.push_back(x1);
-                to_ret.push_back(x2);
-                if (ui->autoRange->isChecked()){
-                    to_ret.push_back(((ui->xMin)->text()).toDouble());
-                    to_ret.push_back(((ui->xMax)->text()).toDouble());
-                } else {
-                    double y1=(ui->yMax)->text().toDouble(&flag);
-                    if (flag){
-                        to_ret.push_back(y1);
-                        double y2=(ui->yMin)->text().toDouble(&flag);
-                        to_ret.push_back(y2);
-                        if(flag&&y1<=y2)
-                            flag=false;
-                    }
-                }
-            }
-        }
+    to_ret.push_back(((ui->xMin)->text()).toDouble());
+    to_ret.push_back(((ui->xMax)->text()).toDouble());
+    if (ui->autoRange->isChecked()){
+        to_ret.push_back(((ui->xMin)->text()).toDouble());
+        to_ret.push_back(((ui->xMax)->text()).toDouble());
+    } else {
+        to_ret.push_back(((ui->yMin)->text()).toDouble());
+        to_ret.push_back(((ui->yMax)->text()).toDouble());
     }
     return to_ret;
 }
@@ -106,21 +78,11 @@ bool MainWindow::is_range_in_pi()
 }
 
 void MainWindow::add_dynamic_f()
-{  
-//    QVBoxLayout* labelLayout=new QVBoxLayout(scrollArea);
-
-    DynamicField* df= new DynamicField(scrollArea_content);
-//    scrollArea = new QScrollArea;
-//    scrollArea->setBackgroundRole(QPalette::Dark);
-//    scrollArea->setWidget(df);
-    int count=labelLayout->count();
-    labelLayout->insertWidget(count-1, df);
-
+{
+    DynamicField* df= new DynamicField(this);
     connect(df, SIGNAL(delete_field(DynamicField*)), this, SLOT(delete_dynamic_f(DynamicField*)));
     fields.push_back(df);
-
-
-//    ui->FuncLayout->addWidget(df);
+    ui->FuncLayout->addWidget(df);
 }
 
 void MainWindow::delete_dynamic_f(DynamicField* df)
@@ -153,8 +115,8 @@ void MainWindow::build_graph()
     emit build_signal();
 }
 
-
-void MainWindow::close_event(QCloseEvent* event){
+void MainWindow::close_event(QCloseEvent* event)
+{
     emit close_w();
     event->accept();
 }

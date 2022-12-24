@@ -19,26 +19,18 @@ void Grand::build_graph()
     QVector <QString> expressions=w_main->get_exp();
     QVector <QColor> colors=w_main->get_cols();
     for(int j=0; j<expressions.size(); j++){
-        int i=func_window->add_func(expressions[j], colors[j]);
-        if(i!=0){
+        if(int i=func_window->add_func(expressions[j], colors[j])!=0){
             // ошибка ввода
             delete func_window;
             error* window_err=new error;
+            window_err->erro(i);
             window_err->setModal(true);
             window_err->show();
             return;
         }
     }
     func_window->add_graphs(0, 5);
-    bool flag=true;
-    QVector <double> ran=w_main->get_range(flag);
-    if (!flag){
-        error* window_err=new error;
-        window_err->setModal(true);
-        window_err->erro();
-        window_err->show();
-        return;
-    }
+    QVector <double> ran=w_main->get_range();
     if(w_main->is_range_in_pi()){
         func_window->set_range_pi(ran[0], ran[1]);
     }
