@@ -22,7 +22,7 @@ QVector<QVector<QVector<double>>> FuncCollection::get_points(double x_min, doubl
 {
     QVector<QVector<QVector<double>>> graphs;
     double m_inf = pow(2,12);
-    double delta=(x_max-x_min)/(100000*m_points);
+    double delta=(x_max-x_min)/(10000*m_points);
 
     for (Function* f: arr_func)
     {
