@@ -15,7 +15,8 @@ error::~error()
     delete ui;
 }
 
-void error::erro(int i){
+void error::erro(int i)
+{
     if(i==1)
         ui->text->setText("Некорректно введена формула ");
     else if(i==5)

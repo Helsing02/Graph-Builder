@@ -1,8 +1,4 @@
 #include "Grand.h"
-#include "mainwindow.h"
-#include "FuncWindow.h"
-#include "error.h"
-
 
 Grand::Grand()
 {

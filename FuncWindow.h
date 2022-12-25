@@ -2,6 +2,9 @@
 #define FUNCWINDOW_H
 
 #include <QMainWindow>
+#include <QGraphicsScene>
+#include <QPixmap>
+#include <QString>
 #include "qcustomplot.h"
 #include "FuncCollection.h"
 
@@ -23,7 +26,6 @@ public:
     void find_range_y();
     void change_range_x(double, double);
     void change_range_y(double, double);
-    void change_size(int, int, int, int);
 
 private slots:
     void save_pic();

@@ -1,10 +1,5 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
-#include <QLabel>
-#include <QColor>
-#include <iostream>
-#include <QCloseEvent>
-#include <cmath>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -17,13 +12,13 @@ MainWindow::MainWindow(QWidget *parent)
     ui->yMin->setEnabled(false);
     ui->yMax->setEnabled(false);
 
-    scrollArea=new QScrollArea(this);
-    ui->FuncLayout->addWidget(scrollArea);
-    scrollArea_content=new QWidget();
-    labelLayout=new QVBoxLayout(scrollArea_content);
-    scrollArea->setWidget(scrollArea_content);
-    scrollArea->setWidgetResizable(true);
-    labelLayout->addStretch();
+    scroll_area=new QScrollArea(this);
+    ui->FuncLayout->addWidget(scroll_area);
+    scroll_area_content=new QWidget();
+    label_layout=new QVBoxLayout(scroll_area_content);
+    scroll_area->setWidget(scroll_area_content);
+    scroll_area->setWidgetResizable(true);
+    label_layout->addStretch();
 //    labelLayout= new QVBoxLayout(scrollArea);
 //    scrollLayot= new QVBoxLayout;
 //    QVBoxLayout *layout = new QVBoxLayout;
@@ -115,12 +110,12 @@ void MainWindow::add_dynamic_f()
 {  
 //    QVBoxLayout* labelLayout=new QVBoxLayout(scrollArea);
 
-    DynamicField* df= new DynamicField(scrollArea_content);
+    DynamicField* df= new DynamicField(scroll_area_content);
 //    scrollArea = new QScrollArea;
 //    scrollArea->setBackgroundRole(QPalette::Dark);
 //    scrollArea->setWidget(df);
-    int count=labelLayout->count();
-    labelLayout->insertWidget(count-1, df);
+    int count=label_layout->count();
+    label_layout->insertWidget(count-1, df);
 
     connect(df, SIGNAL(delete_field(DynamicField*)), this, SLOT(delete_dynamic_f(DynamicField*)));
     fields.push_back(df);

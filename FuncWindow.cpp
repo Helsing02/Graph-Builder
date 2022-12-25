@@ -1,9 +1,7 @@
 #include "FuncWindow.h"
 #include "ui_funcwindow.h"
 
-#include <QGraphicsScene>
-#include <QPixmap>
-#include <QString>
+
 
 FuncWindow::FuncWindow(QWidget *parent)
     : QMainWindow(parent),
@@ -126,16 +124,12 @@ void FuncWindow::rebuild(QCPRange new_range)
 {
     if((new_range.upper - new_range.lower) >= 500 || (new_range.upper - new_range.lower)<=1)
     {
-        std::cout<<x_old_min<<" "<<x_old_max<<" "<<new_range.lower<<" "<<new_range.upper<<std::endl;
         w_graphic->xAxis->setRange(x_old_min, x_old_max);
         w_graphic->yAxis->setRange(y_old_min, y_old_min+(x_old_max-x_old_min)*y_att_x);
-        std::cout << "Stoped\n";
     }
     else
     {
         double m_zoom_coef = (new_range.upper - new_range.lower)/(x_old_max - x_old_min);
-        std::cout<<x_old_min<<" "<<x_old_max<<" "<<new_range.lower<<" "<<new_range.upper<<std::endl;
-
 
         if(abs(new_range.lower - x_old_min) > (x_old_max - x_old_min)/30 &&
                 abs(new_range.upper - x_old_max) > (x_old_max - x_old_min)/30)
@@ -152,8 +146,6 @@ void FuncWindow::rebuild(QCPRange new_range)
             }
             */
             if(round((new_range.upper-new_range.lower)*1000)/1000!=round((x_old_max-x_old_min)*1000)/1000){
-                std::cout<<"change size\n";
-
                 QVector<QVector<QVector<double>>> graphs;
                 graphs = m_func_collection.get_points(new_range.lower, new_range.upper, m_zoom_coef);
 
@@ -164,7 +156,6 @@ void FuncWindow::rebuild(QCPRange new_range)
                     index++;
                 }
             } else {
-                std::cout<<"grab\n";
                 if(new_range.lower < x_old_min){
 
                     QVector<QVector<QVector<double>>> graphs;

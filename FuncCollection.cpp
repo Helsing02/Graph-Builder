@@ -1,5 +1,4 @@
 ﻿#include "FuncCollection.h"
-#include <math.h>
 
 int FuncCollection::add_func(std::string new_func)
 {
