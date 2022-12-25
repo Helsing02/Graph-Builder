@@ -1,12 +1,12 @@
-#include "mainwindow.h"
+#include "Grand.h"
 
 #include <QApplication>
-
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
+    Grand g;
+
+
     return a.exec();
 }

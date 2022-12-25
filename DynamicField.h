@@ -1,36 +1,42 @@
+#pragma once
+
 #include <QLabel>
 #include <QLineEdit>
 #include <QCheckBox>
 #include <QPushButton>
 #include <QLayout>
 #include <QSpacerItem>
+#include <string>
 
-#pragma once
+#include <QColorDialog>
+#include <QColor>
+#include <QPalette>
+#include <QDebug>
 
-class DynamicField: public QObject
+class DynamicField: public QWidget
 {
     Q_OBJECT
 private:
-    QLabel* fx;
-    QLineEdit* input_line;
-    QCheckBox* check_box;
-    QPushButton* push_button;
-    QVBoxLayout* layout;
-    QHBoxLayout* upper;
-    QHBoxLayout* lower;
+    QLabel* m_fx;
+    QLineEdit* m_input_line;
+    QCheckBox* m_check_box;
+    QPushButton* m_btn_delete;
+    QPushButton* m_btn_color;
+    QVBoxLayout* m_layout;
+    QHBoxLayout* m_upper;
+    QHBoxLayout* m_lower;
+    QColor m_color;
 
 public:
-    DynamicField(QWidget* parent=0);
-    ~DynamicField();
-    QLayout* getLayout();
-    QString expression();
-    bool visibility();
+    DynamicField(QWidget* parent=nullptr);
+    QString text();
+    QString get_exp();
+    QColor get_color();
+    bool disp_is_checked();
 
 private slots:
-    void b_clicked();
+    void del_btn_clicked();
+    void col_btn_clicked();
 signals:
-    void deleteField(DynamicField*);
-
-
-
+    void delete_field(DynamicField*);
 };

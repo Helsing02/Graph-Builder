@@ -1,57 +1,68 @@
 #include "DynamicField.h"
+#include <QColorDialog>
 
-DynamicField::DynamicField(QWidget* parent){
-    fx =new QLabel(parent);
-    fx->setText("f(x)=");
+DynamicField::DynamicField(QWidget* parent):
+    QWidget(parent)
+{
 
-    input_line = new QLineEdit(parent);
+    m_fx =new QLabel(this);
+    m_fx->setText("f(x)=");
 
-    check_box = new QCheckBox(parent);
-    check_box->setText("Отображать");
-    check_box->setChecked(true);
+    m_input_line = new QLineEdit(this);
 
-    push_button = new QPushButton(parent);
-    push_button->setText("Удалить");
+    m_check_box = new QCheckBox(this);
+    m_check_box->setText("Отображать");
+    m_check_box->setChecked(true);
 
+    m_btn_delete = new QPushButton(this);
+    m_btn_delete->setText("Удалить");
 
-    upper=new QHBoxLayout;
-    upper->addWidget(fx);
-    upper->addWidget(input_line);
+    m_btn_color = new QPushButton(this);
+    m_btn_color->setText("Цвет");
 
-    lower=new QHBoxLayout;
-    lower->addStretch();
-    lower->addWidget(check_box);
-    lower->addWidget(push_button);
+    m_layout=new QVBoxLayout(this);
+    m_upper=new QHBoxLayout(this);
+    m_lower=new QHBoxLayout(this);
+    m_layout->addLayout(m_upper);
+    m_layout->addLayout(m_lower);
 
-    layout=new QVBoxLayout;
-    layout->addLayout(upper);
-    layout->addLayout(lower);
+    m_lower->addStretch();
+    m_lower->addWidget(m_check_box);
+    m_lower->addWidget(m_btn_delete);
+    m_lower->addWidget(m_btn_color);
 
-    QAbstractButton::connect(push_button, SIGNAL(clicked()), this, SLOT(b_clicked()));
+    m_upper->addWidget(m_fx);
+    m_upper->addWidget(m_input_line);
+
+    m_color=0x880033ff;
+
+    QAbstractButton::connect(m_btn_delete, SIGNAL(clicked()), this, SLOT(del_btn_clicked()));
+    QAbstractButton::connect(m_btn_color, SIGNAL(clicked()), this, SLOT(col_btn_clicked()));
+
 }
 
-QLayout* DynamicField::getLayout(){
-    return layout;
+QString DynamicField::get_exp()
+{
+    return m_input_line->text();
 }
 
-DynamicField::~DynamicField(){
-    delete fx;
-    delete input_line;
-    delete check_box;
-    delete push_button;
-    delete lower;
-    delete upper;
-    delete layout;
+QColor DynamicField::get_color()
+{
+    return m_color;
 }
 
-void DynamicField::b_clicked(){
-    emit deleteField(this);
+bool DynamicField::disp_is_checked()
+{
+    return m_check_box->isChecked();
+}
+//для цвета
+void DynamicField::col_btn_clicked()
+{
+    m_color=QColorDialog::getColor(Qt::white);
+    m_btn_color->setStyleSheet( QString("background-color: %1").arg(m_color.name()));
 }
 
-QString DynamicField::expression(){
-    return input_line->text();
-}
-
-bool DynamicField::visibility(){
-    return check_box->isChecked();
+void DynamicField::del_btn_clicked()
+{
+    emit delete_field(this);
 }
