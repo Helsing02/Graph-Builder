@@ -6,8 +6,6 @@
 #include <QPushButton>
 #include <QLayout>
 #include <QSpacerItem>
-#include <string>
-
 #include <QColorDialog>
 #include <QColor>
 #include <QPalette>
@@ -29,7 +27,6 @@ private:
 
 public:
     DynamicField(QWidget* parent=nullptr);
-    QString text();
     QString get_exp();
     QColor get_color();
     bool disp_is_checked();

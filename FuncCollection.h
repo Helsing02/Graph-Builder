@@ -1,7 +1,9 @@
 #include <vector>
-#include "Function.h"
 #include <QVector>
-#include <math.h>
+#include <cmath>
+
+#include "Function.h"
+
 
 
 class FuncCollection

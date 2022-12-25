@@ -2,6 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QLabel>
+#include <QColor>
+#include <QCloseEvent>
+#include <cmath>
+
 #include "DynamicField.h"
 #include "qscrollarea.h"
 #include "ref.h"
@@ -42,9 +47,9 @@ private:
     Ui::MainWindow *ui;
     QVector <DynamicField*> fields;
     Ref* ref;
-    QScrollArea* scrollArea;
-    QVBoxLayout *labelLayout;
-    QWidget* scrollArea_content;
+    QScrollArea* scroll_area;
+    QVBoxLayout *label_layout;
+    QWidget* scroll_area_content;
 
 };
 #endif // MAINWINDOW_H
