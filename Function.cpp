@@ -15,6 +15,8 @@ using std::isinf;
 using std::stack;
 using std::map;
 using std::cout;
+using std::isnan;
+using std::isinf;
 
 bool Function::letter(char c) {
     if ('a' <= c && c <= 'z') return true;
@@ -36,8 +38,8 @@ int Function::set_rpn(string s) {
                                 { "-", 1 },
                                 { "*", 2 },
                                 { "/", 2 },
-                                { "^", 3 },
-                                { "~", 4 },
+                                { "~", 3 },
+                                { "^", 4 },
                                 { "sin()", 5 },
                                 { "asin()", 5 },
                                 { "sinh()", 5 },
@@ -74,17 +76,17 @@ int Function::set_rpn(string s) {
             if (i > 0) {
                 previous = i - 1;
                 while (previous > 0 && s[previous] == ' ') previous--;
-                if (previous >= 0 && (!operation(s[previous]) && s[previous] != '(' && s[previous] != ',' && s[previous] != ' ' && s[i - 1] != 'g' && s[previous] != '|')) return 4;
+                if (previous >= 0 && (!operation(s[previous]) && s[previous] != '(' && s[previous] != ',' && s[previous] != ' ' && s[i - 1] != 'g' && s[previous] != '|')) return 1;
             }
             bool dot = false;
             symbols = s[i];
-            while (digit(s[i + 1]) || (s[i + 1] == '.')) {
+            while ((i + 1 < len) && (digit(s[i + 1]) || s[i + 1] == '.')) {
                 if (digit(s[i + 1])) symbols += s[i + 1];
                 if (s[i + 1] == '.') {
-                    if (!digit(s[i + 2])) return 2;
+                    if ((i + 2 < len) && !digit(s[i + 2])) return 1;
                     symbols += s[i + 1];
                     if (dot == false) dot = true;
-                    else return 2;
+                    else return 1;
                 }
                 i++;
             }
@@ -92,27 +94,23 @@ int Function::set_rpn(string s) {
             dig++;
         }
         else if (operation(s[i])) {
-            if (i == len - 1) return 3;
+            if (i == len - 1) return 1;
             next = i + 1;
             while (next < len - 1 && s[next] == ' ') next++;
-            if (s[next] == ')' || s[next] == ',') return 3;
-            if (minus_in_root == true && operation(s[next])) return 3;
-            int next2 = next + 1;
-            while (next2 < len - 1 && s[next2] == ' ') next2++;
-            if (operation(s[next]) && operation(s[next2])) return 3;
+            if (s[next] == ')' || s[next] == ',') return 1;
+            if (operation(s[i]) && operation(s[next])) return 1;
 
-            if (i == 0 && s[i] != '-') return 3;
-            if (i == 0 && s[i] == '-' && operation(s[next])) return 3;
+            if (i == 0 && s[i] != '-') return 1;
             previous = i;
             if (i > 0) {
                 previous = i - 1;
                 while (previous > 0 && s[previous] == ' ') previous--;
-                if (i != 0 && (s[previous] == '(' || s[previous] == '|') && operation(s[next])) return 3;
-                if (previous == 0 && s[previous] == ' ' && s[i] != '-') return 3;
-                if ((s[i] != '-') && operation(s[previous])) return 3;
+                if (i != 0 && (s[previous] == '(' || s[previous] == '|') && operation(s[next])) return 1;
+                if (previous == 0 && s[previous] == ' ' && s[i] != '-') return 1;
+                if ((s[previous] == '(' || s[previous] == ',') && s[i] != '-') return 1;
             }
             symbols = s[i];
-            if ((s[i] == '-') && ((previous == 0 && s[previous] == ' ') || operation(s[previous]) || s[previous] == '(' || minus_in_root == true || check_minus == true)) symbols = "~";
+            if ((s[i] == '-') && (i == 0 || (previous == 0 && s[previous] == ' ') || s[previous] == '(' || minus_in_root == true || check_minus == true)) symbols = "~";
             check_minus = false;
             while ((!Stek.empty()) && (operationPriority[Stek.top()] >= operationPriority[symbols])) {
                 m_expression.push_back(Stek.top());
@@ -126,41 +124,41 @@ int Function::set_rpn(string s) {
             if (i > 0) {
                 previous = i - 1;
                 while (previous > 0 && s[previous] == ' ') previous--;
-                if (previous >= 0 && (!operation(s[previous]) && s[previous] != '(' && s[previous] != ',' && s[previous] != ' ' && s[previous] != '|')) return 4;
+                if (previous >= 0 && (!operation(s[previous]) && s[previous] != '(' && s[previous] != ',' && s[previous] != ' ' && s[previous] != '|')) return 1;
             }
             if (s[i] == 'x') {
                 m_expression.push_back("x");
                 dig++;
             }
             else if (s[i] == 'p') {
-                if (s[i + 1] == 'i') {
+                if ((i + 1 < len) && s[i + 1] == 'i') {
                     m_expression.push_back("pi");
                     i++;
                     dig++;
                 }
-                else return 2;
+                else return 1;
             }
             else {
                 int f = 0;
                 switch (s[i]) {
                 case 'r':
-                    if ((s[i + 1] == 'o') && (s[i + 2] == 'o') && (s[i + 3] == 't') && (s[i + 4] == '(')) {
+                    if ((i + 4 < len) && (s[i + 1] == 'o') && (s[i + 2] == 'o') && (s[i + 3] == 't')) {
                         countroot++;
                         symbols = "root()";
                         i = i + 3;
                         oper++;
                     }
-                    else return 2;
+                    else return 1;
                     break;
                 case 'g':
-                    if ((s[i + 1] == 'r') && (s[i + 2] == 'a') && (s[i + 3] == 'd')) {
+                    if ((i + 4 < len) && (s[i + 1] == 'r') && (s[i + 2] == 'a') && (s[i + 3] == 'd')) {
                         symbols = "grad()";
                         i = i + 3;
                     }
-                    else return 2;
+                    else return 1;
                     break;
                 case 's':
-                    if ((s[i + 1] == 'i') && (s[i + 2] == 'n')) {
+                    if ((i + 4 < len) && (s[i + 1] == 'i') && (s[i + 2] == 'n')) {
                         if (s[i + 3] == 'h') {
                             symbols = "sinh()";
                             i++;
@@ -168,18 +166,18 @@ int Function::set_rpn(string s) {
                         else symbols = "sin()";
                         i = i + 2;
                     }
-                    else if (s[i + 1] == 'h') {
+                    else if ((i + 2 < len) && s[i + 1] == 'h') {
                         symbols = "sinh()";
                         i++;
                     }
-                    else if ((s[i + 1] == 'g') && (s[i + 2] == 'n')) {
+                    else if ((i + 3 < len) && (s[i + 1] == 'g') && (s[i + 2] == 'n')) {
                         symbols = "sgn()";
                         i = i + 2;
                     }
-                    else return 2;
+                    else return 1;
                     break;
                 case 'c':
-                    if ((s[i + 1] == 'o') && (s[i + 2] == 's')) {
+                    if ((i + 4 < len) && (s[i + 1] == 'o') && (s[i + 2] == 's')) {
                         if (s[i + 3] == 'h') {
                             symbols = "cosh()";
                             i++;
@@ -187,11 +185,11 @@ int Function::set_rpn(string s) {
                         else symbols = "cos()";
                         i = i + 2;
                     }
-                    else if (s[i + 1] == 'h') {
+                    else if ((i + 2 < len) && s[i + 1] == 'h') {
                         symbols = "cosh()";
                         i++;
                     }
-                    else if ((s[i + 1] == 'o') && (s[i + 2] == 't') && (s[i + 3] == 'a') && (s[i + 4] == 'n')) {
+                    else if ((i + 6 < len) && (s[i + 1] == 'o') && (s[i + 2] == 't') && (s[i + 3] == 'a') && (s[i + 4] == 'n')) {
                         if (s[i + 5] == 'h') {
                             symbols = "cotanh()";
                             i++;
@@ -199,7 +197,7 @@ int Function::set_rpn(string s) {
                         else symbols = "cotan()";
                         i = i + 4;
                     }
-                    else if ((s[i + 1] == 't') && (s[i + 2] == 'g')) {
+                    else if ((i + 4 < len) && (s[i + 1] == 't') && (s[i + 2] == 'g')) {
                         if (s[i + 3] == 'h') {
                             symbols = "cotanh()";
                             i++;
@@ -207,10 +205,10 @@ int Function::set_rpn(string s) {
                         else symbols = "cotan()";
                         i = i + 2;
                     }
-                    else return 2;
+                    else return 1;
                     break;
                 case 't':
-                    if ((s[i + 1] == 'a') && (s[i + 2] == 'n')) {
+                    if ((i + 4 < len) && (s[i + 1] == 'a') && (s[i + 2] == 'n')) {
                         if (s[i + 3] == 'h') {
                             symbols = "tanh()";
                             i++;
@@ -218,7 +216,7 @@ int Function::set_rpn(string s) {
                         else symbols = "tan()";
                         i = i + 2;
                     }
-                    else if (s[i + 1] == 'g') {
+                    else if ((i + 3 < len) && s[i + 1] == 'g') {
                         if (s[i + 2] == 'h') {
                             symbols = "tanh()";
                             i++;
@@ -226,11 +224,11 @@ int Function::set_rpn(string s) {
                         else symbols = "tan()";
                         i++;
                     }
-                    else return 2;
+                    else return 1;
                     break;
                 case 'a':
-                    if ((s[i + 1] == 'r') && (s[i + 2] == 'c')) f = f + 2;
-                    if ((s[i + f + 1] == 's') && (s[i + f + 2] == 'i') && (s[i + f + 3] == 'n')) {
+                    if ((i + 3 < len) && (s[i + 1] == 'r') && (s[i + 2] == 'c')) f = f + 2;
+                    if ((i + f + 5 < len) && (s[i + f + 1] == 's') && (s[i + f + 2] == 'i') && (s[i + f + 3] == 'n')) {
                         if (s[i + f + 4] == 'h') {
                             symbols = "asinh()";
                             i++;
@@ -238,7 +236,7 @@ int Function::set_rpn(string s) {
                         else symbols = "asin()";
                         i = i + f + 3;
                     }
-                    else if ((s[i + f + 1] == 'c') && (s[i + f + 2] == 'o') && (s[i + f + 3] == 's')) {
+                    else if ((i + f + 5 < len) && (s[i + f + 1] == 'c') && (s[i + f + 2] == 'o') && (s[i + f + 3] == 's')) {
                         if (s[i + f + 4] == 'h') {
                             symbols = "acosh()";
                             i++;
@@ -246,7 +244,7 @@ int Function::set_rpn(string s) {
                         else symbols = "acos()";
                         i = i + f + 3;
                     }
-                    else if ((s[i + f + 1] == 't') && (s[i + f + 2] == 'a') && (s[i + f + 3] == 'n')) {
+                    else if ((i + f + 5 < len) && (s[i + f + 1] == 't') && (s[i + f + 2] == 'a') && (s[i + f + 3] == 'n')) {
                         if (s[i + f + 4] == 'h') {
                             symbols = "atanh()";
                             i++;
@@ -254,7 +252,7 @@ int Function::set_rpn(string s) {
                         else symbols = "atan()";
                         i = i + f + 3;
                     }
-                    else if ((s[i + f + 1] == 't') && (s[i + f + 2] == 'g')) {
+                    else if ((i + f + 4 < len) && (s[i + f + 1] == 't') && (s[i + f + 2] == 'g')) {
                         if (s[i + f + 3] == 'h') {
                             symbols = "atanh()";
                             i++;
@@ -262,7 +260,7 @@ int Function::set_rpn(string s) {
                         else symbols = "atan()";
                         i = i + f + 2;
                     }
-                    else if ((s[i + f + 1] == 'c') && (s[i + f + 2] == 'o') && (s[i + f + 3] == 't') && (s[i + f + 4] == 'a') && (s[i + f + 5] == 'n')) {
+                    else if ((i + f + 7 < len) && (s[i + f + 1] == 'c') && (s[i + f + 2] == 'o') && (s[i + f + 3] == 't') && (s[i + f + 4] == 'a') && (s[i + f + 5] == 'n')) {
                         if (s[i + f + 6] == 'h') {
                             symbols = "acotanh()";
                             i++;
@@ -270,7 +268,7 @@ int Function::set_rpn(string s) {
                         else symbols = "acotan()";
                         i = i + f + 5;
                     }
-                    else if ((s[i + f + 1] == 'c') && (s[i + f + 2] == 't') && (s[i + f + 3] == 'g')) {
+                    else if ((i + f + 5 < len) && (s[i + f + 1] == 'c') && (s[i + f + 2] == 't') && (s[i + f + 3] == 'g')) {
                         if (s[i + f + 4] == 'h') {
                             symbols = "acotanh()";
                             i++;
@@ -278,14 +276,14 @@ int Function::set_rpn(string s) {
                         else symbols = "acotan()";
                         i = i + f + 3;
                     }
-                    else if ((s[i + 1] == 'b') && (s[i + 2] == 's')) {
+                    else if ((i + 3 < len) && (s[i + 1] == 'b') && (s[i + 2] == 's')) {
                         symbols = "abs()";
                         i = i + 2;
                     }
-                    else return 2;
+                    else return 1;
                     break;
                 case 'e':
-                    if ((s[i + 1] == 'x') && (s[i + 2] == 'p')) {
+                    if ((i + 3 < len) && (s[i + 1] == 'x') && (s[i + 2] == 'p')) {
                         symbols = "exp()";
                         i = i + 2;
                     }
@@ -296,24 +294,24 @@ int Function::set_rpn(string s) {
                     }
                     break;
                 case 'l':
-                    if ((s[i + 1] == 'n')) {
+                    if ((i + 2 < len) && (s[i + 1] == 'n')) {
                         symbols = "log()";
                         i++;
                     }
-                    else if ((s[i + 1] == 'o') && (s[i + 2] == 'g') && (s[i + 3] == '1') && (s[i + 4] == '0') && (s[i + 5] == '(')) {
+                    else if ((i + 5 < len) && (s[i + 1] == 'o') && (s[i + 2] == 'g') && (s[i + 3] == '1') && (s[i + 4] == '0') && (s[i + 5] == '(')) {
                         symbols = "log10()";
                         i = i + 4;
-                        check_loga++;
+                        check_loga = 1;
                     }
-                    else if ((s[i + 1] == 'o') && (s[i + 2] == 'g')) {
+                    else if ((i + 3 < len) && (s[i + 1] == 'o') && (s[i + 2] == 'g')) {
                         symbols = "loga()";
                         int i1 = i + 3;
                         if (digit(s[i1])) {
+                            check_loga = 1;
                             while (s[i1] != '(') {
-                                if (i1 == len - 1 || !(digit(s[i1]))) return 2;
+                                if (i1 == len - 1 || (!(digit(s[i1])) && s[i1] != '.')) return 1;
                                 i1++;
                             }
-                            check_loga++;
                         }
                         else if (s[i1] == '(') {
                             int check1 = 1;
@@ -325,16 +323,17 @@ int Function::set_rpn(string s) {
                             }
                             if (s[i1] != '(') return 1;
                         }
-                        else return 3;
+                        else return 1;
                         i = i + 2;
                         oper++;
                     }
-                    else return 2;
+                    else return 1;
                     break;
                 default:
-                    return 2;
+                    return 1;
                     break;
                 }
+                if ((symbols != "e" && symbols != "loga()" && symbols != "log10()") && s[i + 1] != '(') return 1;
                 if (symbols != "e") {
                     while ((!Stek.empty()) && (operationPriority[Stek.top()] >= operationPriority[symbols])) {
                         m_expression.push_back(Stek.top());
@@ -345,6 +344,7 @@ int Function::set_rpn(string s) {
             }
         }
         else {
+            int check2;
             switch (s[i]) {
             case '|':
                 if (i == 0) {
@@ -357,16 +357,17 @@ int Function::set_rpn(string s) {
                     brackets++;
                     checkabs++;
                     check_digit_in_abs = dig;
+                    if (i + 1 == len) return 1;
                     next = i + 1;
                     while (next < len - 1 && s[next] == ' ') next++;
                     if (s[next] == '-') check_minus = true;
                     last_abs = 1;
                 }
                 else if (i == len - 1 && checkabs > 0) {
-                    if (last_abs == 1) return 3;
+                    if (last_abs == 1) return 1;
                     previous = i - 1;
                     while (previous > 0 && s[previous] == ' ') previous--;
-                    if (operation(s[previous])) return 3;
+                    if (operation(s[previous])) return 1;
                     while ((!Stek.empty()) && (Stek.top() != "(")) {
                         m_expression.push_back(Stek.top());
                         Stek.pop();
@@ -374,18 +375,17 @@ int Function::set_rpn(string s) {
                     if (Stek.top() == "(") Stek.pop();
                     brackets--;
                     checkabs--;
-                    if (check_digit_in_abs == dig) return 3;
+                    if (check_digit_in_abs == dig) return 1;
                     check_digit_in_abs = 0;
                 }
                 else {
                     previous = i - 1;
                     while (previous > 0 && s[previous] == ' ') previous--;
-                    if (previous == 0 && s[previous] == ' ') symbols = "abs()";
                     next = i + 1;
                     while (next < len - 1 && s[next] == ' ') next++;
 
                     if ((operation(s[previous]) || s[previous] == '(' || s[previous] == ',' || s[previous] == '|' || s[previous] == ' ') && (letter(s[next]) || digit(s[next]) || s[next] == '(' || s[next] == '|' || s[next] == '-')) {
-                        if (last_abs == 2) return 3;
+                        if (last_abs == 2) return 1;
                         while ((!Stek.empty()) && (operationPriority[Stek.top()] >= operationPriority["abs()"])) {
                             m_expression.push_back(Stek.top());
                             Stek.pop();
@@ -399,11 +399,11 @@ int Function::set_rpn(string s) {
                         last_abs = 1;
                     }
                     else if ((letter(s[previous]) || digit(s[previous]) || s[previous] == ')' || s[previous] == '|') && (operation(s[next]) || s[next] == ')' || s[next] == ',' || s[next] == '|' || s[next] == ' ')) {
-                        if (checkabs == 0) return 3;
-                        if (last_abs == 1) return 3;
+                        if (checkabs == 0) return 1;
+                        if (last_abs == 1) return 1;
                         previous = i - 1;
                         while (previous > 0 && s[previous] == ' ') previous--;
-                        if (operation(s[previous])) return 3;
+                        if (operation(s[previous])) return 1;
                         while ((!Stek.empty()) && (Stek.top() != "(")) {
                             m_expression.push_back(Stek.top());
                             Stek.pop();
@@ -411,25 +411,25 @@ int Function::set_rpn(string s) {
                         if (Stek.top() == "(") Stek.pop();
                         brackets--;
                         checkabs--;
-                        if (check_digit_in_abs == dig) return 3;
+                        if (check_digit_in_abs == dig) return 1;
                         check_digit_in_abs = 0;
                         last_abs = 2;
                     }
-                    else return 3;
+                    else return 1;
                 }
                 break;
             case '(':
                 if (i == len - 1) return 1;
                 next = i + 1;
                 while (next < len - 1 && s[next] == ' ') next++;
-                if (s[next] == ')') return 4;
-                if (s[next] == ' ' && next == len - 1) return 4;
+                if (s[next] == ')') return 1;
+                if (s[next] == ' ' && next == len - 1) return 1;
                 if (i > 0) {
                     previous = i - 1;
                     while (previous > 0 && s[previous] == ' ') previous--;
-                    if (digit(s[previous]) && check_loga == 0) return 4;
+                    if (digit(s[previous]) && check_loga == 0) return 1;
                 }
-                check_loga--;
+                check_loga = 0;
                 Stek.push("(");
                 brackets++;
                 break;
@@ -439,10 +439,13 @@ int Function::set_rpn(string s) {
                 if (i < len - 1) {
                     next++;
                     while (next < len - 1 && s[next] == ' ') next++;
-                    if (!operation(s[next]) && s[next] != ')' && s[next] != ',' && s[next] != '(' && s[next] != ' ' && s[next] != '|') return 3;
+                    if (!operation(s[next]) && s[next] != ')' && s[next] != ',' && s[next] != '(' && s[next] != ' ' && s[next] != '|') return 1;
                 }
-                previous = i;
-                while (s[previous] != '(' && previous > 0) {
+                previous = i - 1;
+                check2 = -1;
+                while (check2 != 0 && previous > 0) {
+                    if (s[previous] == '(') check2++;
+                    if (s[previous] == ')') check2--;
                     if (s[previous] == '|') count_abs++;
                     previous--;
                 }
@@ -462,22 +465,27 @@ int Function::set_rpn(string s) {
                 if (countroot > 0) {
                     previous = i - 1;
                     while (s[previous] == ' ') previous--;
-                    if (s[previous] == '(') return 4;
+                    if (s[previous] == '(') return 1;
                     next = i + 1;
                     while (s[next] == ' ') next++;
                     i = next - 1;
                     if (s[next] == '-') minus_in_root = true;
-                    else if (!digit(s[next]) && !letter(s[next]) && s[next] != '(') return 3;
+                    else if (!digit(s[next]) && !letter(s[next]) && s[next] != '(' && s[next] != '|') return 1;
                     while ((!Stek.empty()) && (Stek.top() != "(")) {
                         m_expression.push_back(Stek.top());
                         Stek.pop();
                     }
                     countroot--;
+                    if (!Stek.empty()) {
+                        Stek.pop();
+                        if (Stek.top() != "root()") return 1;
+                        Stek.push("(");
+                    }
                 }
-                else return 4;
+                else return 1;
                 break;
             default:
-                return 3;
+                return 1;
                 break;
             }
         }
@@ -490,9 +498,9 @@ int Function::set_rpn(string s) {
         }
     }
     if (brackets != 0) return 1;
-    if (checkabs != 0) return 3;
-    if ((dig == 0) || (countroot != 0)) return 4;
-    if (dig >= 2 && oper == 0) return 4;
+    if (checkabs != 0) return 1;
+    if ((dig == 0) || (countroot != 0)) return 1;
+    if (dig >= 2 && oper == 0) return 1;
     return 0;
 }
 
@@ -612,6 +620,6 @@ double Function::get_y(double x) {
     first = Stek1.top();
     Stek1.pop();
     if (first == -0.0) return 0;
-    if (isnan(first) || isinf(fabs(z))) return nan("1");
+    if (isnan(first) || isinf(fabs(first))) return nan("1");
     else return first;
 }
